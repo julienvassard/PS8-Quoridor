@@ -1,6 +1,7 @@
-h1 {
+.center {
     text-align: center;
 }
+
 
 .wrapper {
     display: grid;
@@ -16,6 +17,20 @@ h1 {
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
+}
+
+
+
+.playerA {
+    background-color: #0048ff;
+}
+
+.playerB {
+    background-color: #ff0000;
+}
+
+.possible-move {
+    background-color: #00ff00;
 }
 
 
