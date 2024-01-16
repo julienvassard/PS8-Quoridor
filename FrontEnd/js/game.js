@@ -7,21 +7,18 @@ let activePlayer = 'playerA';
 for (var i = 1; i <= 289; i++) {
     var newDiv = document.createElement('div');
     newDiv.textContent = ' ';
-    if(i > 0 && i < 18){
-        if(!(i % 2 === 0))
+    if (i > 0 && i < 18) {
+        if (!(i % 2 === 0))
             newDiv.classList.add('top-row');
-    }
-    else if(i > 272 && i <= 289){
-        if(!(i % 2 === 0))
+    } else if (i > 272 && i <= 289) {
+        if (!(i % 2 === 0))
             newDiv.classList.add('bot-row');
     }
-    if(!(Math.floor((i - 1) / 17) % 2 === 0)){
+    if (!(Math.floor((i - 1) / 17) % 2 === 0)) {
         newDiv.classList.add('odd-row');
-    }
-    else if(!(Math.floor((i - 1) % 17) % 2 === 0)){
+    } else if (!(Math.floor((i - 1) % 17) % 2 === 0)) {
         newDiv.classList.add('odd-col');
-    }
-    else if(!(newDiv.classList.contains('odd-row'))){
+    } else if (!(newDiv.classList.contains('odd-row'))) {
         newDiv.classList.add('cell');
     }
     newDiv.setAttribute('id', i);
@@ -39,7 +36,30 @@ cells[player2Position].classList.add('playerB');
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 
-function handleCellClick(cellIndex,position) {
+cells.forEach((cell, index) => {
+    if (cell.classList.contains('odd-row') || cell.classList.contains('odd-col'))
+        cell.addEventListener('click', () => handleWall(index));
+    else
+        cell.addEventListener('click', () => movePlayer(index));
+});
+
+function handleWall(cellIndex) {
+    cellIndex = cellIndex;
+    const row = Math.floor(cellIndex / 17);
+    const col = cellIndex % 17;
+
+    const clickedCell = cells[cellIndex];
+    clickedCell.classList.add('wall');
+
+    const rigthCell = cells[cellIndex + 1];
+    const leftCell = cells[cellIndex - 1];
+    if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
+        rigthCell.classList.add('wall');
+    if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+        leftCell.classList.add('wall');
+}
+
+function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
 
     validMoves.forEach(move => {
@@ -66,11 +86,6 @@ function getValidMoves(position) {
 
     return moves;
 }
-
-
-cells.forEach((cell, index) => {
-    cell.addEventListener('click', () => movePlayer(index));
-});
 
 function movePlayer(cellIndex) {
     const clickedCell = cells[cellIndex];
