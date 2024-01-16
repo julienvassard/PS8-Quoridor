@@ -2,6 +2,8 @@
 const wrapper = document.querySelector('.wrapper');
 const cells = [];
 let activePlayer = 'playerA';
+var nbWallPlayerA = 10;
+var nbWallPlayerB = 10;
 
 // Générez les 81 div et ajoutez-les à la div wrapper
 for (var i = 1; i <= 289; i++) {
@@ -16,7 +18,8 @@ for (var i = 1; i <= 289; i++) {
     }
     if (!(Math.floor((i - 1) / 17) % 2 === 0)) {
         newDiv.classList.add('odd-row');
-    } else if (!(Math.floor((i - 1) % 17) % 2 === 0)) {
+    }
+    if (!(Math.floor((i - 1) % 17) % 2 === 0)) {
         newDiv.classList.add('odd-col');
     } else if (!(newDiv.classList.contains('odd-row'))) {
         newDiv.classList.add('cell');
@@ -44,19 +47,33 @@ cells.forEach((cell, index) => {
 });
 
 function handleWall(cellIndex) {
+    if((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)){
+        alert("Vous n'avez plus de murs !")
+        return;
+    }
     cellIndex = cellIndex;
     const row = Math.floor(cellIndex / 17);
     const col = cellIndex % 17;
 
     const clickedCell = cells[cellIndex];
-    clickedCell.classList.add('wall');
-
     const rigthCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
-    if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
-        rigthCell.classList.add('wall');
-    if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
-        leftCell.classList.add('wall');
+
+    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
+        clickedCell.classList.add('wall');
+        if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
+            rigthCell.classList.add('wall');
+        if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+            leftCell.classList.add('wall');
+    }
+    if(activePlayer === 'playerA'){
+        nbWallPlayerA--;
+        document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
+    }else if(activePlayer === 'playerB'){
+        nbWallPlayerB--;
+        document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
+    }
+    changeActivePlayer();
 }
 
 function handleCellClick(cellIndex, position) {
@@ -78,9 +95,12 @@ function getValidMoves(position) {
     console.log("Row : " + row);
     console.log("Col : " + col);
 
+    const cellFoward = cells[position + 17];
+
+
     // Déplacements horizontaux et verticaux
     if (row > 0) moves.push(position - 34);
-    if (row < 16) moves.push(position + 34);
+    if (row < 16 && !(cellFoward.classList.contains('wall'))) moves.push(position + 34);
     if (col > 0) moves.push(position - 2);
     if (col < 16) moves.push(position + 2);
 
@@ -117,8 +137,7 @@ function movePlayer(cellIndex) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
 
         // Basculer vers l'autre joueur
-        activePlayer = activePlayer === 'playerA' ? 'playerB' : 'playerA';
-        document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
+        changeActivePlayer();
 
     }
     checkCrossing(player1Position, player2Position);
@@ -135,5 +154,10 @@ function checkCrossing(playerAPosition, playerBPosition) {
             alert("Player B a gagné !")
         }
     }
+}
+
+function changeActivePlayer() {
+    activePlayer = activePlayer === 'playerA' ? 'playerB' : 'playerA';
+    document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
 }
 

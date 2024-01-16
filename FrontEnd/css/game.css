@@ -2,6 +2,16 @@
     text-align: center;
 }
 
+.container {
+    display: flex;
+}
+
+.profilA,
+.profilB,
+.wrapper {
+    margin: 10px; /* Vous pouvez ajuster la marge selon vos besoins */
+}
+
 
 .wrapper {
     display: grid;
