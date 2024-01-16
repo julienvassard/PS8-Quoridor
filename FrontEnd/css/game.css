@@ -17,8 +17,14 @@
 
 .wrapper {
     display: grid;
-    grid-template-columns: repeat(17, 40px);
-    grid-template-rows: repeat(17, 40px);
+    grid-template-columns: repeat(8, 40px 5px) 40px;
+    grid-template-rows: repeat(18, 40px 5px);
+
+    /*grid-template-columns: 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px;
+    grid-template-rows: 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px 40px 10px;*/
+
+    /*grid-template-columns: repeat(17, 40px);
+    grid-template-rows: repeat(17, 40px);*/
     gap: 2px;
     margin: 50px auto;
     justify-content: center;
@@ -27,7 +33,6 @@
 .wrapper .cell {
     border: 1px solid #dddddd;
     text-align: center;
-    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -59,6 +64,8 @@
 
 .wall {
     background-color: #ffc500;
+    padding: 2px;
+
 }
 
 
