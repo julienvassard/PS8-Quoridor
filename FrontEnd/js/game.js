@@ -4,19 +4,40 @@ const cells = [];
 let activePlayer = 'playerA';
 
 // Générez les 81 div et ajoutez-les à la div wrapper
-for (var i = 1; i <= 81; i++) {
+for (var i = 1; i <= 289; i++) {
     var newDiv = document.createElement('div');
     newDiv.textContent = ' ';
-    newDiv.classList.add('cell' + i);
+    if(i > 0 && i < 18){
+        if(!(i % 2 === 0))
+            newDiv.classList.add('top-row');
+    }
+    else if(i > 272 && i <= 289){
+        if(!(i % 2 === 0))
+            newDiv.classList.add('bot-row');
+    }
+    if(!(Math.floor((i - 1) / 17) % 2 === 0)){
+        newDiv.classList.add('odd-row');
+    }
+    else if(!(Math.floor((i - 1) % 17) % 2 === 0)){
+        newDiv.classList.add('odd-col');
+    }
+    else if(!(newDiv.classList.contains('odd-row'))){
+        newDiv.classList.add('cell');
+    }
+    newDiv.setAttribute('id', i);
+
     cells.push(newDiv);
     wrapper.appendChild(newDiv);
 
 }
 
-let player1Position = 4;
-let player2Position = 76;
+let player1Position = 8;
+let player2Position = 280;
 cells[player1Position].classList.add('playerA');
 cells[player2Position].classList.add('playerB');
+
+var lanePlayerA = document.getElementsByClassName('top-row');
+var lanePlayerB = document.getElementsByClassName('bot-row');
 
 function handleCellClick(cellIndex,position) {
     const validMoves = getValidMoves(position);
@@ -30,20 +51,22 @@ function handleCellClick(cellIndex,position) {
 }
 
 function getValidMoves(position) {
-    const row = Math.floor(position / 9);
-    const col = position % 9;
+    const row = Math.floor(position / 17);
+    const col = position % 17;
     const moves = [];
 
+    console.log("Row : " + row);
+    console.log("Col : " + col);
 
     // Déplacements horizontaux et verticaux
-    if (row > 0) moves.push(position - 9);
-    if (row < 8) moves.push(position + 9);
-    if (col > 0) moves.push(position - 1);
-    if (col < 8) moves.push(position + 1);
-
+    if (row > 0) moves.push(position - 34);
+    if (row < 16) moves.push(position + 34);
+    if (col > 0) moves.push(position - 2);
+    if (col < 16) moves.push(position + 2);
 
     return moves;
 }
+
 
 cells.forEach((cell, index) => {
     cell.addEventListener('click', () => movePlayer(index));
@@ -81,5 +104,21 @@ function movePlayer(cellIndex) {
         // Basculer vers l'autre joueur
         activePlayer = activePlayer === 'playerA' ? 'playerB' : 'playerA';
         document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
+
+    }
+    checkCrossing(player1Position, player2Position);
+}
+
+function checkCrossing(playerAPosition, playerBPosition) {
+    for (var i = 0; i < lanePlayerB.length; i++) {
+        if (lanePlayerB[i].contains(cells[playerAPosition])) {
+            alert("Player A a gagné !")
+        }
+    }
+    for (var i = 0; i < lanePlayerA.length; i++) {
+        if (lanePlayerA[i].contains(cells[playerBPosition])) {
+            alert("Player B a gagné !")
+        }
     }
 }
+
