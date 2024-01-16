@@ -4,11 +4,13 @@
 
 .container {
     display: flex;
+    justify-content: space-between;
 }
 
 .profilA,
 .profilB,
-.wrapper {
+.wrapper,
+.message{
     margin: 10px; /* Vous pouvez ajuster la marge selon vos besoins */
 }
 

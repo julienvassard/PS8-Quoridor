@@ -4,6 +4,7 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
+hideAntiCheat();
 
 // Générez les 81 div et ajoutez-les à la div wrapper
 for (var i = 1; i <= 289; i++) {
@@ -159,5 +160,17 @@ function checkCrossing(playerAPosition, playerBPosition) {
 function changeActivePlayer() {
     activePlayer = activePlayer === 'playerA' ? 'playerB' : 'playerA';
     document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
+    showAntiCheat();
 }
+
+function hideAntiCheat() {
+    document.querySelector('.anti-cheat').style.display = 'none';
+    wrapper.style.display = 'grid';
+}
+
+function showAntiCheat() {
+    document.querySelector('.anti-cheat').style.display = 'grid';
+    wrapper.style.display = 'none';
+}
+
 
