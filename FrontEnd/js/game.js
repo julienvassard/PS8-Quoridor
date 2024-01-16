@@ -27,10 +27,22 @@ for (var i = 1; i <= 289; i++) {
     }
     newDiv.setAttribute('id', i);
 
+    if(!(newDiv.classList.contains('odd-row') || newDiv.classList.contains('odd-col'))){
+        if(i > 0 && i <= 119){
+            newDiv.setAttribute('visibility','-1');
+        }else if(i>=137 && i<= 153){
+            newDiv.setAttribute('visibility','0');
+        }else if (i>=171 && i<= 289){
+            newDiv.setAttribute('visibility','1');
+        }
+    }
+
     cells.push(newDiv);
     wrapper.appendChild(newDiv);
 
 }
+
+activateFog();
 
 let player1Position = 8;
 let player2Position = 280;
@@ -66,15 +78,56 @@ function handleWall(cellIndex) {
             rigthCell.classList.add('wall');
         if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
             leftCell.classList.add('wall');
+        if(activePlayer === 'playerA'){
+            nbWallPlayerA--;
+            document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
+            changeVisibility(rigthCell,leftCell,"playerA");
+            changeActivePlayer();
+        }else if(activePlayer === 'playerB'){
+            nbWallPlayerB--;
+            document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
+            changeVisibility(rigthCell,leftCell,"playerB");
+            changeActivePlayer();
+        }
+
     }
-    if(activePlayer === 'playerA'){
-        nbWallPlayerA--;
-        document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
-    }else if(activePlayer === 'playerB'){
-        nbWallPlayerB--;
-        document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
+
+}
+
+function changeVisibility(rigthCell,leftCell,player){
+    rigthCellNumber = rigthCell.getAttribute('id');
+    leftCellNumber = leftCell.getAttribute('id');
+    topRightCell = cells[rigthCellNumber - 18];
+    botRightCell = cells[parseInt(rigthCellNumber) + 16];
+    topLeftCell = cells[leftCellNumber - 18];
+    botLeftCell = cells[parseInt(leftCellNumber) + 16];
+
+    topRightCellPlus1 = cells[rigthCellNumber - 52];
+    botRightCellPlus1 = cells[parseInt(rigthCellNumber) + 50];
+    topLeftCellPlus1 = cells[leftCellNumber - 52];
+    botLeftCellPlus1 = cells[parseInt(leftCellNumber) + 50];
+
+    if(player == "playerA"){
+        topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
+        botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
+        topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
+        botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
+
+        topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
+        botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
+        topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
+        botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
+    }else if(player == "playerB"){
+        topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
+        botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
+        topLeftCell.setAttribute('visibility',parseInt(topLeftCell.getAttribute('visibility')) + 2);
+        botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
+
+        topRightCellPlus1.setAttribute('visibility',parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
+        botRightCellPlus1.setAttribute('visibility',parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
+        topLeftCellPlus1.setAttribute('visibility',parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
+        botLeftCellPlus1.setAttribute('visibility',parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
     }
-    changeActivePlayer();
 }
 
 function handleCellClick(cellIndex, position) {
@@ -161,6 +214,7 @@ function changeActivePlayer() {
     activePlayer = activePlayer === 'playerA' ? 'playerB' : 'playerA';
     document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
     showAntiCheat();
+    activateFog();
 }
 
 function hideAntiCheat() {
@@ -171,6 +225,28 @@ function hideAntiCheat() {
 function showAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'grid';
     wrapper.style.display = 'none';
+}
+
+function activateFog() {
+    if(activePlayer == "playerA"){
+        for (let i= 0;i<cells.length;i++){
+            if(cells[i].getAttribute('visibility') <= "0"){
+                cells[i].classList.remove('fog');
+            }
+            if(cells[i].getAttribute('visibility') > "0"){
+                cells[i].classList.add('fog');
+            }
+        }
+    }else if(activePlayer == "playerB"){
+        for (let i= 0;i<cells.length;i++){
+            if(cells[i].getAttribute('visibility') >= "0"){
+                cells[i].classList.remove('fog');
+            }
+            if(cells[i].getAttribute('visibility') < "0"){
+                cells[i].classList.add('fog');
+            }
+        }
+    }
 }
 
 
