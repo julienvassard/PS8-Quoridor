@@ -86,7 +86,7 @@ function handleWall(cellIndex) {
     else if(bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
 
     var poser = false;
-    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.contains('wall')){
+    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.contains('wall') && !rigthCell.classList.contains('wall')&& !leftCell.classList.contains('wall')){
         clickedCell.classList.add('wall');
         murAPose[0] = cellIndex;
         if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
@@ -102,13 +102,25 @@ function handleWall(cellIndex) {
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.contains('wall') && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
                 upCell.classList.add('wall');
-            murAPose[1] = cellIndex+1;
+            murAPose[1] = cellIndex+17;
             if(col > 0 && !downCell.classList.contains('wall') && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
                 downCell.classList.add('wall');
-            murAPose[2] = cellIndex-1;
+            murAPose[2] = cellIndex-17;
             poser = true;
 
         }
+    else if( (rigthCell.classList.contains('wall') || leftCell.classList.contains('wall')) && !upCell.classList.contains('wall') && !downCell.classList.contains('wall') ){
+        clickedCell.classList.add('wall');
+        murAPose[0] = cellIndex;
+        if(col < 16 && !upCell.classList.contains('wall') && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+            upCell.classList.add('wall');
+        murAPose[1] = cellIndex+17;
+        if(col > 0 && !downCell.classList.contains('wall') && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+            downCell.classList.add('wall');
+        murAPose[2] = cellIndex-17;
+        poser = true;
+
+    }
         if(poser) {
             showValider();
             if (activePlayer === 'playerA') {
@@ -123,7 +135,7 @@ function handleWall(cellIndex) {
 
             }
         }
-
+        console.log(murAPose);
 
 
 }
