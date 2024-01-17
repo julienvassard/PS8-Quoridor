@@ -65,11 +65,17 @@
     background-color: #696969;
 }
 
-.wall {
-    background-color: #ffc500;
+.wallTMP {
+    background-color: #008000;
     padding: 2px;
 
 }
+
+.wall {
+    background-color: #ffc500;
+    padding: 2px;
+}
+
 
 .valider{
     display: grid;
