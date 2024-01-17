@@ -4,8 +4,9 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
+let positionMur= 0;
 hideAntiCheat();
-
+hideValider();
 // Générez les 81 div et ajoutez-les à la div wrapper
 for (var i = 1; i <= 289; i++) {
     var newDiv = document.createElement('div');
@@ -64,7 +65,7 @@ function handleWall(cellIndex) {
         alert("Vous n'avez plus de murs !")
         return;
     }
-    cellIndex = cellIndex;
+
     const row = Math.floor(cellIndex / 17);
     const col = cellIndex % 17;
 
@@ -72,22 +73,25 @@ function handleWall(cellIndex) {
     const rigthCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
 
-    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
+    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.contains('wall')){
+
         clickedCell.classList.add('wall');
         if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
             rigthCell.classList.add('wall');
         if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
             leftCell.classList.add('wall');
+        showValider();
+        positionMur = cellIndex;
         if(activePlayer === 'playerA'){
             nbWallPlayerA--;
             document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
             changeVisibility(rigthCell,leftCell,"playerA");
-            changeActivePlayer();
+
         }else if(activePlayer === 'playerB'){
             nbWallPlayerB--;
             document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
             changeVisibility(rigthCell,leftCell,"playerB");
-            changeActivePlayer();
+
         }
 
     }
@@ -220,8 +224,44 @@ function changeActivePlayer() {
 function hideAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'none';
     wrapper.style.display = 'grid';
+    hideValider();
 }
+function hideValider() {
+    document.querySelector('#validerA').style.display = 'none';
+    document.querySelector('#validerB').style.display = 'none';
+    wrapper.style.display = 'grid';
+}
+function showValider() {
+    var id = "#valider";
+    if(activePlayer === 'playerA')
+        id +="A";
+    else
+        id +="B";
+    document.querySelector(id).style.display = 'grid';
 
+}
+function validerWall(){
+    changeActivePlayer();
+
+}
+function annulerWall(){
+    const clickedCell = cells[positionMur];
+    const rigthCell = cells[positionMur + 1];
+    const leftCell = cells[positionMur - 1];
+
+    clickedCell.classList.remove('wall');
+    rigthCell.classList.remove('wall');
+    leftCell.classList.remove('wall');
+    if(activePlayer === 'playerA'){
+        nbWallPlayerA++;
+        document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
+    }else{
+        nbWallPlayerB++;
+        document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
+    }
+
+    hideValider();
+}
 function showAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'grid';
     wrapper.style.display = 'none';
