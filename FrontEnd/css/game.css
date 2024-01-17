@@ -13,7 +13,10 @@
 .message{
     margin: 10px; /* Vous pouvez ajuster la marge selon vos besoins */
 }
-
+.profilA,
+.profilB{
+    width: 200px;
+}
 
 .wrapper {
     display: grid;

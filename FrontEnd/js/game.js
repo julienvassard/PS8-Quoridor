@@ -4,7 +4,7 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
-let positionMur= 0;
+let murAPose = new Array(3);
 hideAntiCheat();
 hideValider();
 // Générez les 81 div et ajoutez-les à la div wrapper
@@ -61,6 +61,7 @@ cells.forEach((cell, index) => {
 });
 
 function handleWall(cellIndex) {
+
     if((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)){
         alert("Vous n'avez plus de murs !")
         return;
@@ -72,29 +73,58 @@ function handleWall(cellIndex) {
     const clickedCell = cells[cellIndex];
     const rigthCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
+    const upCell = cells[cellIndex + 17];
+    const downCell = cells[cellIndex - 17];
 
-    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.contains('wall')){
+    var bougerMur = false;
+    for(let i in murAPose){
+        const tmpcell = cells[murAPose[i]];
+        tmpcell.classList.remove('wall');
+        bougerMur = true;
+    }
+    if(bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
+    else if(bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
 
+    var poser = false;
+    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.contains('wall')){
         clickedCell.classList.add('wall');
+        murAPose[0] = cellIndex;
         if(col < 16 && !rigthCell.classList.contains('wall') && (rigthCell.classList.contains('odd-row') || rigthCell.classList.contains('odd-col')))
             rigthCell.classList.add('wall');
+        murAPose[1] = cellIndex+1;
         if(col > 0 && !leftCell.classList.contains('wall') && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
             leftCell.classList.add('wall');
-        showValider();
-        positionMur = cellIndex;
-        if(activePlayer === 'playerA'){
-            nbWallPlayerA--;
-            document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
-            changeVisibility(rigthCell,leftCell,"playerA");
-
-        }else if(activePlayer === 'playerB'){
-            nbWallPlayerB--;
-            document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
-            changeVisibility(rigthCell,leftCell,"playerB");
+        murAPose[2] = cellIndex-1;
+        poser = true;
+    }
+        else if( clickedCell.classList.contains('wall') && !upCell.classList.contains('wall') && !downCell.classList.contains('wall') ){
+            clickedCell.classList.add('wall');
+            murAPose[0] = cellIndex;
+            if(col < 16 && !upCell.classList.contains('wall') && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+                upCell.classList.add('wall');
+            murAPose[1] = cellIndex+1;
+            if(col > 0 && !downCell.classList.contains('wall') && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+                downCell.classList.add('wall');
+            murAPose[2] = cellIndex-1;
+            poser = true;
 
         }
+        if(poser) {
+            showValider();
+            if (activePlayer === 'playerA') {
+                nbWallPlayerA--;
+                document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
+                changeVisibility(rigthCell, leftCell, "playerA");
 
-    }
+            } else if (activePlayer === 'playerB') {
+                nbWallPlayerB--;
+                document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
+                changeVisibility(rigthCell, leftCell, "playerB");
+
+            }
+        }
+
+
 
 }
 
@@ -230,6 +260,7 @@ function hideValider() {
     document.querySelector('#validerA').style.display = 'none';
     document.querySelector('#validerB').style.display = 'none';
     wrapper.style.display = 'grid';
+   murAPose = new Array(3);
 }
 function showValider() {
     var id = "#valider";
@@ -245,9 +276,9 @@ function validerWall(){
 
 }
 function annulerWall(){
-    const clickedCell = cells[positionMur];
-    const rigthCell = cells[positionMur + 1];
-    const leftCell = cells[positionMur - 1];
+    const clickedCell = cells[murAPose[0]];
+    const rigthCell = cells[murAPose[1]];
+    const leftCell = cells[murAPose[2]];
 
     clickedCell.classList.remove('wall');
     rigthCell.classList.remove('wall');
