@@ -4,6 +4,7 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
+let isClickedCell = false;
 hideAntiCheat();
 
 // Générez les 81 div et ajoutez-les à la div wrapper
@@ -60,6 +61,10 @@ cells.forEach((cell, index) => {
 });
 
 function handleWall(cellIndex) {
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
     if((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)){
         alert("Vous n'avez plus de murs !")
         return;
@@ -132,13 +137,19 @@ function changeVisibility(rigthCell,leftCell,player){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
-
-    validMoves.forEach(move => {
-        const moveCell = cells[move];
-        if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
-            moveCell.classList.add('possible-move');
-        }
-    });
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
+    else{
+        validMoves.forEach(move => {
+            const moveCell = cells[move];
+            if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
+                moveCell.classList.add('possible-move');
+                isClickedCell = true;
+            }
+        });
+    }
 }
 
 function getValidMoves(position) {
