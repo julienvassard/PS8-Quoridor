@@ -4,6 +4,7 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
+let isClickedCell = false;
 let murAPose = new Array(3);
 hideAntiCheat();
 hideValider();
@@ -98,7 +99,10 @@ function rotationWall(cellIndex){
         }
 }
 function handleWall(cellIndex) {
-
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
     if((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)){
         alert("Vous n'avez plus de murs !")
         return;
@@ -189,14 +193,6 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
         botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
 
-        if(topRightCellPlus1 != undefined)
-            topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
-        if(botRightCellPlus1 != undefined)
-            botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
-        if(topLeftCellPlus1 != undefined)
-            topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
-        if(botLeftCellPlus1 != undefined)
-            botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
     }else if(player == "playerB"){
         topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
         botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
@@ -216,13 +212,19 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
-
-    validMoves.forEach(move => {
-        const moveCell = cells[move];
-        if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
-            moveCell.classList.add('possible-move');
-        }
-    });
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
+    else{
+        validMoves.forEach(move => {
+            const moveCell = cells[move];
+            if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
+                moveCell.classList.add('possible-move');
+                isClickedCell = true;
+            }
+        });
+    }
 }
 
 function getValidMoves(position) {
