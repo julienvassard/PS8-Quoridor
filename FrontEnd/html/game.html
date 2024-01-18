@@ -3,10 +3,15 @@
     <meta charset="utf-8">
     <title>Kick'Oridor - Game</title>
     <link rel="stylesheet" type="text/css" href="../css/game.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'>
 </head>
 <body>
+<div class="header">
+    <img id="home" src="../images/home.png">
+    <img id="kickoridor" src="../images/kickoridor.png">
+    <img id="vingt" src="../images/24.png">
+</div>
 <div class="center">
-    <h1>Kick'Oridor 24</h1>
     <h2 id="currentPlayer">Tour : playerA</h2>
 </div>
 
@@ -14,6 +19,11 @@
     <div class="profilA">
         <h3>Player A</h3>
         <p id="nbWallPlayerA">Murs restant : 10</p>
+        <div id="validerA" class="valider">
+            <p>VALIDER</p>
+            <button class="okButton" onclick="validerWall()">ok</button>
+            <button class="notokButton" onclick="annulerWall()">PAS ok</button>
+        </div>
     </div>
     <div class="anti-cheat">
         <h2>ANTI CHEAT</h2>
@@ -24,7 +34,16 @@
     <div class="profilB">
         <h3>Player B</h3>
         <p id="nbWallPlayerB">Murs restant : 10</p>
+        <div id="validerB" class="valider">
+            <p>VALIDER</p>
+            <button class="okButton" onclick="validerWall()">ok</button>
+            <button class="notokButton" onclick="annulerWall()">PAS ok</button>
+        </div>
     </div>
+
+</div>
+<div class="footer">
+    <img id="param" src="../images/param.png">
 </div>
 </body>
 </html>
