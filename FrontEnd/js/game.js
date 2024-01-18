@@ -120,12 +120,17 @@ function handleWall(cellIndex) {
     if(clickedCell.classList.contains("wallTMP") && clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
         return rotationWall(cellIndex);
     }
-    var bougerMur = removeWallTmp(clickedCell);
-    if(bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
-    else if(bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
+    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
+        var bougerMur = removeWallTmp(clickedCell);
+        if (bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
+        else if (bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
+    }
     var poser = false;
+    //pour placer a l'horizontale
+    if( (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/))
+    ||
+        ((upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
-    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/)){
         clickedCell.classList.add('wallTMP');
         murAPose[0] = cellIndex;
         if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
@@ -189,10 +194,24 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) - 4];
     }
     if(player == "playerA"){
-        topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
-        botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
-        topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
-        botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
+
+        if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
+            topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
+        if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
+            botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
+        if(topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
+            topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
+        if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
+            botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
+
+        if(topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
+            topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
+        if(botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
+            botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
+        if(topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
+            topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
+        if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
+            botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
 
     }else if(player == "playerB"){
         topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
