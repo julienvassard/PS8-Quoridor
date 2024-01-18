@@ -214,10 +214,14 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
             botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
 
     }else if(player == "playerB"){
-        topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
-        botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
-        topLeftCell.setAttribute('visibility',parseInt(topLeftCell.getAttribute('visibility')) + 2);
-        botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
+        if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
+            topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
+        if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
+            botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
+        if(topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
+            topLeftCell.setAttribute('visibility',parseInt(topLeftCell.getAttribute('visibility')) + 2);
+        if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
+            botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
 
         if(topRightCellPlus1 != undefined)
             topRightCellPlus1.setAttribute('visibility',parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
