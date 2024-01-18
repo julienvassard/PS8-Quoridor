@@ -176,10 +176,10 @@ function handleWall(cellIndex) {
 
 }
 
-function changeVisibility(rigthCell,leftCell,player, horizontale){
+function changeVisibility(rigthCell,leftCell,player, horizontale) {
     rigthCellNumber = rigthCell.getAttribute('id');
     leftCellNumber = leftCell.getAttribute('id');
-    if(horizontale) {
+    if (horizontale) {
         topRightCell = cells[rigthCellNumber - 18];
         botRightCell = cells[parseInt(rigthCellNumber) + 16];
         topLeftCell = cells[leftCellNumber - 18];
@@ -189,11 +189,10 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         botRightCellPlus1 = cells[parseInt(rigthCellNumber) + 50];
         topLeftCellPlus1 = cells[leftCellNumber - 52];
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) + 50];
-    }
-    else{
-        topRightCell = cells[parseInt(rigthCellNumber) ]
-       botRightCell = cells[parseInt(rigthCellNumber) - 2];
-        topLeftCell = cells[parseInt(leftCellNumber) ];
+    } else {
+        topRightCell = cells[parseInt(rigthCellNumber)]
+        botRightCell = cells[parseInt(rigthCellNumber) - 2];
+        topLeftCell = cells[parseInt(leftCellNumber)];
         botLeftCell = cells[parseInt(leftCellNumber) - 2];
 
         topRightCellPlus1 = cells[parseInt(rigthCellNumber) + 2];
@@ -201,55 +200,55 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         topLeftCellPlus1 = cells[parseInt(leftCellNumber) + 2];
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) - 4];
     }
-    if(player == "playerA"){
+    if (player == "playerA") {
 
-        if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
-            topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
-        if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
-            botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
-        if(topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
-            topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
-        if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
-            botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
+        if (topRightCell != undefined && topRightCell.hasAttribute('visibility'))
+            topRightCell.setAttribute('visibility', topRightCell.getAttribute('visibility') - 2);
+        if (botRightCell != undefined && botRightCell.hasAttribute('visibility'))
+            botRightCell.setAttribute('visibility', botRightCell.getAttribute('visibility') - 2);
+        if (topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
+            topLeftCell.setAttribute('visibility', topLeftCell.getAttribute('visibility') - 2);
+        if (botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
+            botLeftCell.setAttribute('visibility', botLeftCell.getAttribute('visibility') - 2);
 
-        if(topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
-            topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
-        if(botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
-            botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
-        if(topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
-            topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
-        if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
-            botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
+        if (topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
+            topRightCellPlus1.setAttribute('visibility', topRightCellPlus1.getAttribute('visibility') - 1);
+        if (botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
+            botRightCellPlus1.setAttribute('visibility', botRightCellPlus1.getAttribute('visibility') - 1);
+        if (topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
+            topLeftCellPlus1.setAttribute('visibility', topLeftCellPlus1.getAttribute('visibility') - 1);
+        if (botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
+            botLeftCellPlus1.setAttribute('visibility', botLeftCellPlus1.getAttribute('visibility') - 1);
 
 
-    if(player === "playerA"){
-        topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
-        botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
-        topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
-        botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
+        if (player === "playerA") {
+            topRightCell.setAttribute('visibility', topRightCell.getAttribute('visibility') - 2);
+            botRightCell.setAttribute('visibility', botRightCell.getAttribute('visibility') - 2);
+            topLeftCell.setAttribute('visibility', topLeftCell.getAttribute('visibility') - 2);
+            botLeftCell.setAttribute('visibility', botLeftCell.getAttribute('visibility') - 2);
 
-        topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
-        botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
-        topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
-        botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
-    }else if(player === "playerB"){
+            topRightCellPlus1.setAttribute('visibility', topRightCellPlus1.getAttribute('visibility') - 1);
+            botRightCellPlus1.setAttribute('visibility', botRightCellPlus1.getAttribute('visibility') - 1);
+            topLeftCellPlus1.setAttribute('visibility', topLeftCellPlus1.getAttribute('visibility') - 1);
+            botLeftCellPlus1.setAttribute('visibility', botLeftCellPlus1.getAttribute('visibility') - 1);
+        } else if (player === "playerB") {
 
-        topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
-        botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
-        topLeftCell.setAttribute('visibility',parseInt(topLeftCell.getAttribute('visibility')) + 2);
-        botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
+            topRightCell.setAttribute('visibility', parseInt(topRightCell.getAttribute('visibility')) + 2);
+            botRightCell.setAttribute('visibility', parseInt(botRightCell.getAttribute('visibility')) + 2);
+            topLeftCell.setAttribute('visibility', parseInt(topLeftCell.getAttribute('visibility')) + 2);
+            botLeftCell.setAttribute('visibility', parseInt(botLeftCell.getAttribute('visibility')) + 2);
 
-        if(topRightCellPlus1 != undefined)
-            topRightCellPlus1.setAttribute('visibility',parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
-        if(botRightCellPlus1 != undefined)
-            botRightCellPlus1.setAttribute('visibility',parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
-        if(topLeftCellPlus1 != undefined)
-            topLeftCellPlus1.setAttribute('visibility',parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
-        if(botLeftCellPlus1 != undefined)
-            botLeftCellPlus1.setAttribute('visibility',parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
+            if (topRightCellPlus1 != undefined)
+                topRightCellPlus1.setAttribute('visibility', parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
+            if (botRightCellPlus1 != undefined)
+                botRightCellPlus1.setAttribute('visibility', parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
+            if (topLeftCellPlus1 != undefined)
+                topLeftCellPlus1.setAttribute('visibility', parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
+            if (botLeftCellPlus1 != undefined)
+                botLeftCellPlus1.setAttribute('visibility', parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
+        }
     }
 }
-
 function changeVisibilityPlayer(remove,position,player){
     cellPlayer = cells[position];
     cellLeft = cells[position - 2];
@@ -352,11 +351,10 @@ function getValidMoves(position) {
 
 
     // Déplacements horizontaux et verticaux
-
-    if (row > 0 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
+    if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
     if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 34);
-    if (col > 0 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 2);
-    if (col < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 2);
+    if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 2);
+    if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 2);
 
     return moves;
 }
@@ -446,8 +444,8 @@ function changeActivePlayer() {
 function hideAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'none';
     wrapper.style.display = 'grid';
-
 }
+
 function hideValider() {
     document.querySelector('#validerA').style.display = 'none';
     document.querySelector('#validerB').style.display = 'none';
