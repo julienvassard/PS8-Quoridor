@@ -75,7 +75,10 @@ body {
 .message{
     margin: 10px; /* Vous pouvez ajuster la marge selon vos besoins */
 }
-
+.profilA,
+.profilB{
+    width: 200px;
+}
 
 .wrapper {
     background-image: url('../images/terrain.jpg');
@@ -138,15 +141,41 @@ h3 {
 }
 
 
-
 .possible-move {
     background-color: #696969;
+}
+
+.wallTMP {
+    background-color: #008000;
+    padding: 2px;
+
 }
 
 .wall {
     background-color: #ffc500;
     padding: 2px;
+}
+.wallA {
+    background-color: #0048ff;
+    padding: 2px;
+}
+.wallB {
+    background-color: #ff0000;
+    padding: 2px;
+}
 
+.valider{
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    background-color: red;
+    height: 100px;
+    width: 200px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.valider p{
+    grid-area: 1/ 3 / 1 /1 ;
 }
 
 #nbWallPlayerA, #nbWallPlayerB {
@@ -188,6 +217,8 @@ button {
     cursor: pointer;
     height: 50px;
 }
+
+
 
 
 
