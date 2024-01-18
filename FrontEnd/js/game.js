@@ -54,8 +54,8 @@ var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 
 activateFog();
-changeVisibilityPlayer(false,player1Position);
-changeVisibilityPlayer(false,player2Position);
+changeVisibilityPlayer(false,player1Position,"playerA");
+changeVisibilityPlayer(false,player2Position,"playerB");
 cells.forEach((cell, index) => {
     if (cell.classList.contains('odd-row') || cell.classList.contains('odd-col'))
         cell.addEventListener('click', () => handleWall(index));
@@ -133,70 +133,70 @@ function changeVisibility(rigthCell,leftCell,player){
     }
 }
 
-function changeVisibilityPlayer(remove,position){
+function changeVisibilityPlayer(remove,position,player){
     cellPlayer = cells[position];
     cellLeft = cells[position - 2];
     cellRight = cells[position + 2];
     cellTop = cells[position - 34];
     cellBot = cells[position + 34];
     if(remove === true){
-        if(activePlayer === 'playerA') {
+        if(player === 'playerA') {
             cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) + 1);
-            if (cellLeft !== undefined) {
+            if (cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))) {
                 cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) + 1);
             }
-            if (cellRight !== undefined) {
+            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))) {
                 cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) + 1);
             }
-            if (cellTop !== undefined) {
+            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))) {
                 cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) + 1);
             }
-            if (cellBot !== undefined) {
+            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))) {
                 cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) + 1);
             }
-        }else if (activePlayer === 'playerB'){
+        }else if (player === 'playerB'){
             cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) - 1);
-            if(cellLeft !== undefined){
+            if(cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))){
                 cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) - 1);
             }
-            if (cellRight !== undefined){
+            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))){
                 cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) - 1);
             }
-            if (cellTop !== undefined){
+            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))){
                 cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) - 1);
             }
-            if (cellBot !== undefined){
+            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))){
                 cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) - 1);
             }
         }
 
     }else if(remove === false){
-        if (activePlayer === 'playerA') {
+        if (player === 'playerA') {
             cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) - 1);
-            if (cellLeft !== undefined) {
+            if (cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))) {
                 cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) - 1);
             }
-            if (cellRight !== undefined) {
+            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))) {
                 cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) - 1);
             }
-            if (cellTop !== undefined) {
+            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))) {
                 cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) - 1);
             }
-            if (cellBot !== undefined) {
+            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))) {
                 cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) - 1);
             }
-        }else if (activePlayer === 'playerB'){
+        }else if (player === 'playerB'){
             cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) + 1);
-            if(cellLeft !== undefined){
+            if(cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))){
                 cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) + 1);
             }
-            if (cellRight !== undefined){
+            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))){
                 cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) + 1);
             }
-            if (cellTop !== undefined){
+            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))){
                 cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) + 1);
             }
-            if (cellBot !== undefined){
+            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))){
                 cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) + 1);
             }
         }
@@ -253,7 +253,7 @@ function movePlayer(cellIndex) {
         // Retirer le joueur actif de sa position actuelle
         const currentPlayerPosition = activePlayer === 'playerA' ? player1Position : player2Position;
         cells[currentPlayerPosition].classList.remove(activePlayer);
-        changeVisibilityPlayer(true,currentPlayerPosition);
+        changeVisibilityPlayer(true,currentPlayerPosition,activePlayer);
 
         // Mettre à jour la position du joueur actif
         if (activePlayer === 'playerA') {
@@ -269,7 +269,7 @@ function movePlayer(cellIndex) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
 
         // Basculer vers l'autre joueur
-        changeVisibilityPlayer(false,activePlayer === 'playerA' ? player1Position : player2Position);
+        changeVisibilityPlayer(false,activePlayer === 'playerA' ? player1Position : player2Position,activePlayer);
         changeActivePlayer();
     }
     checkCrossing(player1Position, player2Position);
