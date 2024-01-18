@@ -52,7 +52,8 @@ cells[player2Position].classList.add('playerB');
 
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
-
+var tour = 200;
+var dernierTourB = false;
 cells.forEach((cell, index) => {
     if (cell.classList.contains('odd-row') || cell.classList.contains('odd-col'))
         cell.addEventListener('click', () => handleWall(index));
@@ -277,19 +278,40 @@ function movePlayer(cellIndex) {
         changeActivePlayer();
 
     }
-    checkCrossing(player1Position, player2Position);
+
 }
 
 function checkCrossing(playerAPosition, playerBPosition) {
+    var gagneA =false;
+    var gagneB =false;
     for (var i = 0; i < lanePlayerB.length; i++) {
         if (lanePlayerB[i].contains(cells[playerAPosition])) {
-            alert("Player A a gagné !")
+
+            if(dernierTourB) {
+                gagneA = true;
+
+            }
+            if(!dernierTourB){
+                dernierTourB = true;
+            }
         }
     }
     for (var i = 0; i < lanePlayerA.length; i++) {
         if (lanePlayerA[i].contains(cells[playerBPosition])) {
-            alert("Player B a gagné !")
+                gagneB = true;
         }
+    }
+    if((gagneA && gagneB )||tour==0) {
+        alert("match nul !");
+        location.reload(true);
+    }
+    else if(gagneA){
+        alert("Player A a gagné !");
+        location.reload(true);
+    }
+    else if(gagneB){
+        alert("Player B a gagné !");
+        location.reload(true);
     }
 }
 
@@ -298,6 +320,8 @@ function changeActivePlayer() {
     document.getElementById('currentPlayer').textContent = `Tour : ${activePlayer}`;
     showAntiCheat();
     activateFog();
+    checkCrossing(player1Position, player2Position);
+    tour--;
 }
 
 function hideAntiCheat() {
