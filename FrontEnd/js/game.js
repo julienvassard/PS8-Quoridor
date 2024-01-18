@@ -51,6 +51,7 @@ let player2Position = 280;
 cells[player1Position].classList.add('playerA');
 cells[player2Position].classList.add('playerB');
 
+
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 var tour = 200;
@@ -275,6 +276,7 @@ function movePlayer(cellIndex) {
 
         // Réinitialiser les classes 'possible-move'
         cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
 
         // Basculer vers l'autre joueur
         changeActivePlayer();
