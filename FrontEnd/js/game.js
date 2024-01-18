@@ -4,6 +4,7 @@ const cells = [];
 let activePlayer = 'playerA';
 var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
+let isClickedCell = false;
 let murAPose = new Array(3);
 hideAntiCheat();
 hideValider();
@@ -49,6 +50,7 @@ let player1Position = 8;
 let player2Position = 280;
 cells[player1Position].classList.add('playerA');
 cells[player2Position].classList.add('playerB');
+
 
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
@@ -98,7 +100,10 @@ function rotationWall(cellIndex){
         }
 }
 function handleWall(cellIndex) {
-
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
     if((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)){
         alert("Vous n'avez plus de murs !")
         return;
@@ -189,6 +194,7 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) - 4];
     }
     if(player == "playerA"){
+
         if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
             topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
         if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
@@ -206,6 +212,7 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
             topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
         if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
             botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
+
     }else if(player == "playerB"){
         topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
         botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
@@ -225,13 +232,19 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
-
-    validMoves.forEach(move => {
-        const moveCell = cells[move];
-        if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
-            moveCell.classList.add('possible-move');
-        }
-    });
+    if(isClickedCell){
+        cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
+    }
+    else{
+        validMoves.forEach(move => {
+            const moveCell = cells[move];
+            if (!moveCell.classList.contains('playerA') && !moveCell.classList.contains('playerB')) {
+                moveCell.classList.add('possible-move');
+                isClickedCell = true;
+            }
+        });
+    }
 }
 
 function getValidMoves(position) {
@@ -282,6 +295,7 @@ function movePlayer(cellIndex) {
 
         // Réinitialiser les classes 'possible-move'
         cells.forEach(cell => cell.classList.remove('possible-move'));
+        isClickedCell = false;
 
         // Basculer vers l'autre joueur
         changeActivePlayer();
