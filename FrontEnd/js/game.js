@@ -76,9 +76,7 @@ function rotationWall(cellIndex){
     const leftCell = cells[cellIndex - 1];
     const upCell = cells[cellIndex + 17];
     const downCell = cells[cellIndex - 17];
-
         if((rightCell.classList.contains('wallTMP') ||leftCell.classList.contains('wallTMP') )&& !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/)){
-
             murAPose[0] = cellIndex;
             murAPose[1] = cellIndex+17;
             murAPose[2] = cellIndex-17;
@@ -117,13 +115,9 @@ function handleWall(cellIndex) {
         return rotationWall(cellIndex);
     }
     var bougerMur = removeWallTmp(clickedCell);
-
     if(bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
     else if(bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
-
     var poser = false;
-
-
 
     if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/)){
         clickedCell.classList.add('wallTMP');
@@ -136,7 +130,10 @@ function handleWall(cellIndex) {
         murAPose[2] = cellIndex-1;
         poser = true;
     }
-        else if( clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/) ){
+    //pour placer en verticale
+        else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
+    ||
+        ((rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
             clickedCell.classList.add('wallTMP');
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
@@ -146,32 +143,15 @@ function handleWall(cellIndex) {
                 downCell.classList.add('wallTMP');
             murAPose[2] = cellIndex-17;
             poser = true;
-
         }
-    else if( (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/) ){
-        clickedCell.classList.add('wallTMP');
-        murAPose[0] = cellIndex;
-        if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
-            upCell.classList.add('wallTMP');
-        murAPose[1] = cellIndex+17;
-        if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
-            downCell.classList.add('wallTMP');
-        murAPose[2] = cellIndex-17;
-        poser = true;
-
-    }
         if(poser) {
             showValider();
             if (activePlayer === 'playerA') {
                 nbWallPlayerA--;
                 document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
-
-
             } else if (activePlayer === 'playerB') {
                 nbWallPlayerB--;
                 document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
-
-
             }
         }
 
