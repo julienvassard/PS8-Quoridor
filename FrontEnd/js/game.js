@@ -258,30 +258,30 @@ function changeVisibilityPlayer(remove,position,player){
     if(remove === true){
         if(player === 'playerA') {
             cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) + 1);
-            if (cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))) {
+            if (cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))) {
                 cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) + 1);
             }
-            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))) {
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))) {
                 cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) + 1);
             }
-            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))) {
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))) {
                 cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) + 1);
             }
-            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))) {
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))) {
                 cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) + 1);
             }
         }else if (player === 'playerB'){
             cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) - 1);
-            if(cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))){
+            if(cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))){
                 cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) - 1);
             }
-            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))){
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))){
                 cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) - 1);
             }
-            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))){
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))){
                 cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) - 1);
             }
-            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))){
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))){
                 cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) - 1);
             }
         }
@@ -289,30 +289,30 @@ function changeVisibilityPlayer(remove,position,player){
     }else if(remove === false){
         if (player === 'playerA') {
             cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) - 1);
-            if (cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))) {
+            if (cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))) {
                 cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) - 1);
             }
-            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))) {
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))) {
                 cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) - 1);
             }
-            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))) {
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))) {
                 cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) - 1);
             }
-            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))) {
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))) {
                 cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) - 1);
             }
         }else if (player === 'playerB'){
             cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) + 1);
-            if(cellLeft !== undefined && !(cells[position - 1].classList.contains('wall'))){
+            if(cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))){
                 cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) + 1);
             }
-            if (cellRight !== undefined && !(cells[position + 1].classList.contains('wall'))){
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))){
                 cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) + 1);
             }
-            if (cellTop !== undefined && !(cells[position - 17].classList.contains('wall'))){
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))){
                 cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) + 1);
             }
-            if (cellBot !== undefined && !(cells[position + 17].classList.contains('wall'))){
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))){
                 cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) + 1);
             }
         }
