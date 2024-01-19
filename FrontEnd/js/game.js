@@ -343,6 +343,13 @@ function getValidMoves(position) {
     const cellRight = cells[position + 1];
 
 
+    //deplacement par dessus le joueur
+    if (row > 0 && (cells[position - 34].classList.value.match(/\bplayer[AB]\b/) || )) moves.push(position - 68);
+    if (row < 16 && cells[position + 34].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 68);
+    if (col > 0 && cells[position - 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position - 4);
+    if (col < 16 && cells[position + 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 4);
+
+
     // Déplacements horizontaux et verticaux
     if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
     if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 34);
@@ -511,11 +518,13 @@ function activateFog() {
             }
             if (parseInt(cells[i].getAttribute('id')) - 1 === player1Position) {
                 cells[i].classList.add('playerA');
+                cells[i].classList.remove('playerAFog');
             }
             if (cells[i].getAttribute('visibility') > "0") {
                 cells[i].classList.add('fog');
                 if (cells[i].classList.contains('playerB') && cells[i].classList.contains('fog')) {
                     cells[i].classList.remove('playerB');
+                    cells[i].classList.add('playerBFog');
                 }
             }
         }
@@ -523,6 +532,7 @@ function activateFog() {
         for (let i = 0; i < cells.length; i++) {
             if (parseInt(cells[i].getAttribute('id')) - 1 === player2Position) {
                 cells[i].classList.add('playerB');
+                cells[i].classList.remove('playerBFog');
             }
             if (cells[i].getAttribute('visibility') >= "0") {
                 cells[i].classList.remove('fog');
@@ -531,6 +541,7 @@ function activateFog() {
                 cells[i].classList.add('fog');
                 if (cells[i].classList.contains('playerA') && cells[i].classList.contains('fog')) {
                     cells[i].classList.remove('playerA');
+                    cells[i].classList.add('playerAFog');
                 }
             }
         }
