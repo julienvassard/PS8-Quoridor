@@ -83,12 +83,12 @@ body {
 .wrapper {
     background-image: url('../images/terrain.jpg');
     background-repeat: no-repeat;
-
+    background-size: cover;
     display: grid;
     /*grid-template-columns: repeat(8, 40px 5px) 40px;
     grid-template-rows: repeat(14, 40px 5px);*/
-    grid-template-columns: 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px;
-    grid-template-rows: 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px 5px 40px;
+    grid-template-columns: 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px;
+    grid-template-rows: 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px 10px 60px;
 
     /*grid-template-columns: repeat(17, 40px);
     grid-template-rows: repeat(17, 40px);*/
@@ -174,11 +174,11 @@ h3 {
 .rotation {
     background: url('../images/rotation.png') no-repeat center center; /* Remplacez le chemin par le chemin réel de votre image */
     background-size: cover; /* Ajustez selon vos besoins */
-    width: 15px;
-    height: 15px;
+    width: 22px;
+    height: 22px;
     z-index: 10;
-    margin-left: -5px;
-    margin-top: -5px;
+    margin-left: -6px;
+    margin-top: -6px;
     padding: unset;
 }
 
@@ -242,7 +242,7 @@ background-color: #f1c758;
 .anti-cheat {
     background-color: #E4E5E7;
     width: 300%;
-    height: 300px;
+    height: 600px;
     margin: 10px auto;
     text-align: center;
     font-family: 'Roboto Condensed', sans-serif;
