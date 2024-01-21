@@ -75,9 +75,11 @@ function removeWallTmp(clickedCell){
     var bougerMur = false;
     for(let i in murAPose){
         const tmpcell = cells[murAPose[i]];
-        tmpcell.classList.remove('wallTMP');
-        if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
+        if(tmpcell.classList.contains('wallTMP')) {
+            //if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
+            tmpcell.classList.remove('wallTMP');
             bougerMur = true;
+        }
     }
     return bougerMur;
 }
@@ -89,15 +91,15 @@ function rotationWall(cellIndex){
     const downCell = cells[cellIndex - 17];
         if((rightCell.classList.contains('wallTMP') ||leftCell.classList.contains('wallTMP') )&& !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/)){
             murAPose[0] = cellIndex;
-            murAPose[1] = cellIndex+17;
-            murAPose[2] = cellIndex-17;
+            murAPose[1] = cellIndex-17;
+            murAPose[2] = cellIndex+17;
             rightCell.classList.remove('wallTMP');
             leftCell.classList.remove('wallTMP');
             upCell.classList.add('wallTMP');
             downCell.classList.add('wallTMP');
         }
         else if((upCell.classList.contains('wallTMP') ||downCell.classList.contains('wallTMP') )&& !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/)){
-            console.log('horizontale');
+
             murAPose[0] = cellIndex;
             murAPose[1] = cellIndex+1;
             murAPose[2] = cellIndex-1;
@@ -123,21 +125,21 @@ function handleWall(cellIndex) {
     const clickedCell = cells[cellIndex];
     const rightCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
-    const upCell = cells[cellIndex + 17];
-    const downCell = cells[cellIndex - 17];
+    const upCell = cells[cellIndex - 17];
+    const downCell = cells[cellIndex + 17];
     if(clickedCell.classList.contains("wallTMP") && clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
         return rotationWall(cellIndex);
     }
-    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
+
         var bougerMur = removeWallTmp(clickedCell);
         if (bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
         else if (bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
-    }
+
     var poser = false;
     //pour placer a l'horizontale
     if( (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/))
     ||
-        ((upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && ( upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
         clickedCell.classList.add('wallTMP');
         murAPose[0] = cellIndex;
@@ -152,16 +154,76 @@ function handleWall(cellIndex) {
     //pour placer en verticale
         else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
     ||
-        ((rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+
             clickedCell.classList.add('wallTMP');
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
                 upCell.classList.add('wallTMP');
-            murAPose[1] = cellIndex+17;
+            murAPose[1] = cellIndex-17;
             if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
                 downCell.classList.add('wallTMP');
-            murAPose[2] = cellIndex-17;
+            murAPose[2] = cellIndex+17;
             poser = true;
+        }
+
+        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
+        {
+            //horizontale a droite
+            if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
+
+                clickedCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex;
+                if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
+                    rightCell.classList.add('wallTMP');
+                murAPose[1] = cellIndex+1;
+                if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+2].classList.contains('odd-row') || cells[cellIndex+2].classList.contains('odd-col')))
+                    cells[cellIndex+2].classList.add('wallTMP');
+                murAPose[2] = cellIndex+2;
+                poser = true;
+
+            }
+            //horizontale a gauche
+            else if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && cells[cellIndex-2].classList.contains('odd-row')){
+               
+                clickedCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex;
+               if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 2].classList.contains('odd-row') || cells[cellIndex- 2].classList.contains('odd-col')))
+                    cells[cellIndex- 2].classList.add('wallTMP');
+                murAPose[1] = cellIndex-2;
+                if(col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+                    leftCell.classList.add('wallTMP');
+                murAPose[2] = cellIndex-1;
+                poser = true;
+
+        }
+        }
+        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) //la cellule est une colonne
+        {
+            if(cells[cellIndex-34] != undefined && !cells[cellIndex-34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex-34].classList.contains('odd-col') ){
+                //verticale haut
+                clickedCell.classList.add('wallTMP');
+                murAPose[2] = cellIndex;
+                if(!cells[cellIndex- 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 34].classList.contains('odd-row') || cells[cellIndex- 34].classList.contains('odd-col')))
+                    cells[cellIndex- 34].classList.add('wallTMP');
+                murAPose[1] = cellIndex-34;
+                if(col > 0 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+                    upCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex-17;
+                poser = true;
+            }
+            else if( cells[cellIndex+34] != undefined &&!cells[cellIndex+34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+34].classList.contains('odd-col') ){
+                //verticale bas
+                clickedCell.classList.add('wallTMP');
+                murAPose[1] = cellIndex;
+                if(!cells[cellIndex+ 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+ 34].classList.contains('odd-row') || cells[cellIndex+ 34].classList.contains('odd-col')))
+                    cells[cellIndex+ 34].classList.add('wallTMP');
+                murAPose[2] = cellIndex+34;
+                if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+                    downCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex+17;
+                poser = true;
+            }
         }
         if(poser) {
             showValider();
@@ -199,53 +261,47 @@ function changeVisibility(rigthCell,leftCell,player, horizontale) {
         botRightCellPlus1 = cells[parseInt(rigthCellNumber) - 4];
         topLeftCellPlus1 = cells[parseInt(leftCellNumber) + 2];
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) - 4];
+        console.log(parseInt(rigthCellNumber) + " " + (parseInt(rigthCellNumber) - 2) +" " + parseInt(leftCellNumber))
     }
-    if (player == "playerA") {
 
-        if (topRightCell != undefined && topRightCell.hasAttribute('visibility'))
-            topRightCell.setAttribute('visibility', topRightCell.getAttribute('visibility') - 2);
-        if (botRightCell != undefined && botRightCell.hasAttribute('visibility'))
-            botRightCell.setAttribute('visibility', botRightCell.getAttribute('visibility') - 2);
-        if (topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
-            topLeftCell.setAttribute('visibility', topLeftCell.getAttribute('visibility') - 2);
-        if (botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
-            botLeftCell.setAttribute('visibility', botLeftCell.getAttribute('visibility') - 2);
+    if(player == "playerA"){
 
-        if (topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
-            topRightCellPlus1.setAttribute('visibility', topRightCellPlus1.getAttribute('visibility') - 1);
-        if (botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
-            botRightCellPlus1.setAttribute('visibility', botRightCellPlus1.getAttribute('visibility') - 1);
-        if (topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
-            topLeftCellPlus1.setAttribute('visibility', topLeftCellPlus1.getAttribute('visibility') - 1);
-        if (botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
-            botLeftCellPlus1.setAttribute('visibility', botLeftCellPlus1.getAttribute('visibility') - 1);
+        if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
+            topRightCell.setAttribute('visibility',topRightCell.getAttribute('visibility') - 2);
+        if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
+            botRightCell.setAttribute('visibility',botRightCell.getAttribute('visibility') - 2);
+        if(topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
+            topLeftCell.setAttribute('visibility',topLeftCell.getAttribute('visibility') - 2);
+        if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
+            botLeftCell.setAttribute('visibility',botLeftCell.getAttribute('visibility') - 2);
 
+        if(topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
+            topRightCellPlus1.setAttribute('visibility',topRightCellPlus1.getAttribute('visibility') - 1);
+        if(botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
+            botRightCellPlus1.setAttribute('visibility',botRightCellPlus1.getAttribute('visibility') - 1);
+        if(topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
+            topLeftCellPlus1.setAttribute('visibility',topLeftCellPlus1.getAttribute('visibility') - 1);
+        if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
+            botLeftCellPlus1.setAttribute('visibility',botLeftCellPlus1.getAttribute('visibility') - 1);
 
-        if (player === "playerA") {
-            topRightCell.setAttribute('visibility', topRightCell.getAttribute('visibility') - 2);
-            botRightCell.setAttribute('visibility', botRightCell.getAttribute('visibility') - 2);
-            topLeftCell.setAttribute('visibility', topLeftCell.getAttribute('visibility') - 2);
-            botLeftCell.setAttribute('visibility', botLeftCell.getAttribute('visibility') - 2);
+    }else if(player == "playerB"){
+        if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
+            topRightCell.setAttribute('visibility',parseInt(topRightCell.getAttribute('visibility')) + 2);
+        if(botRightCell != undefined && botRightCell.hasAttribute('visibility'))
+            botRightCell.setAttribute('visibility',parseInt(botRightCell.getAttribute('visibility')) + 2);
+        if(topLeftCell != undefined && topLeftCell.hasAttribute('visibility'))
+            topLeftCell.setAttribute('visibility',parseInt(topLeftCell.getAttribute('visibility')) + 2);
+        if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
+            botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
 
-            topRightCellPlus1.setAttribute('visibility', topRightCellPlus1.getAttribute('visibility') - 1);
-            botRightCellPlus1.setAttribute('visibility', botRightCellPlus1.getAttribute('visibility') - 1);
-            topLeftCellPlus1.setAttribute('visibility', topLeftCellPlus1.getAttribute('visibility') - 1);
-            botLeftCellPlus1.setAttribute('visibility', botLeftCellPlus1.getAttribute('visibility') - 1);
-        } else if (player === "playerB") {
-
-            topRightCell.setAttribute('visibility', parseInt(topRightCell.getAttribute('visibility')) + 2);
-            botRightCell.setAttribute('visibility', parseInt(botRightCell.getAttribute('visibility')) + 2);
-            topLeftCell.setAttribute('visibility', parseInt(topLeftCell.getAttribute('visibility')) + 2);
-            botLeftCell.setAttribute('visibility', parseInt(botLeftCell.getAttribute('visibility')) + 2);
-
-            if (topRightCellPlus1 != undefined)
-                topRightCellPlus1.setAttribute('visibility', parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
-            if (botRightCellPlus1 != undefined)
-                botRightCellPlus1.setAttribute('visibility', parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
-            if (topLeftCellPlus1 != undefined)
-                topLeftCellPlus1.setAttribute('visibility', parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
-            if (botLeftCellPlus1 != undefined)
-                botLeftCellPlus1.setAttribute('visibility', parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
+        if(topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
+            topRightCellPlus1.setAttribute('visibility',parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
+        if(botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
+            botRightCellPlus1.setAttribute('visibility',parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
+        if(topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
+            topLeftCellPlus1.setAttribute('visibility',parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
+        if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
+            botLeftCellPlus1.setAttribute('visibility',parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
         }
     }
 }
