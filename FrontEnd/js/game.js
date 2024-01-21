@@ -71,12 +71,11 @@ cells.forEach((cell, index) => {
         cell.addEventListener('click', () => movePlayer(index));
 });
 
-function removeWallTmp(clickedCell){
+function removeWallTmp(){
     var bougerMur = false;
     for(let i in murAPose){
         const tmpcell = cells[murAPose[i]];
         if(tmpcell.classList.contains('wallTMP')) {
-            //if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
             tmpcell.classList.remove('wallTMP');
             bougerMur = true;
         }
@@ -304,7 +303,6 @@ function changeVisibility(rigthCell,leftCell,player, horizontale) {
             botLeftCellPlus1.setAttribute('visibility',parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
         }
     }
-}
 function changeVisibilityPlayer(remove,position,player){
     cellPlayer = cells[position];
     cellLeft = cells[position - 2];
@@ -416,6 +414,10 @@ function getValidMoves(position) {
 }
 
 function movePlayer(cellIndex) {
+    if(murAPose[0]!=undefined){
+        annulerWall();
+    }
+
     const clickedCell = cells[cellIndex];
 
     if (cellIndex === player1Position && activePlayer === 'playerA') {
