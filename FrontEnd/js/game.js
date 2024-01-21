@@ -413,7 +413,7 @@ function getValidMoves(position) {
 
 
     //deplacement par dessus le joueur
-    if (row > 0 && (cells[position - 34].classList.value.match(/\bplayer[AB]\b/) || )) moves.push(position - 68);
+    if (row > 0 && cells[position - 34].classList.value.match(/\bplayer[AB]\b/)) moves.push(position - 68);
     if (row < 16 && cells[position + 34].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 68);
     if (col > 0 && cells[position - 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position - 4);
     if (col < 16 && cells[position + 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 4);
