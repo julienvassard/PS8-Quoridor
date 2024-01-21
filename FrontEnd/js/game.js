@@ -343,18 +343,15 @@ function getValidMoves(position) {
     const cellRight = cells[position + 1];
 
 
-    //deplacement par dessus le joueur
-    if (row > 0 && (cells[position - 34].classList.value.match(/\bplayer[AB]\b/) || )) moves.push(position - 68);
-    if (row < 16 && cells[position + 34].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 68);
-    if (col > 0 && cells[position - 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position - 4);
-    if (col < 16 && cells[position + 2].classList.value.match(/\bplayer[AB]\b/)) moves.push(position + 4);
-
-
-    // Déplacements horizontaux et verticaux
-    if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
-    if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 34);
-    if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 2);
-    if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 2);
+    //deplacement du joueur
+    if (row > 0 && (cells[position - 34].classList.value.match(/\bplayer[AB]\b/) || cells[position - 34].classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position - 51].classList.value.match(/\bwall[AB]\b/))) moves.push(position - 68);
+    else if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
+    if (row < 16 && (cells[position + 34].classList.value.match(/\bplayer[AB]\b/) || cells[position + 34].classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position + 51].classList.value.match(/\bwall[AB]\b/))) moves.push(position + 68);
+    else if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 34);
+    if (col > 0 && (cells[position - 2].classList.value.match(/\bplayer[AB]\b/) || cells[position - 2].classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position - 3].classList.value.match(/\bwall[AB]\b/))) moves.push(position - 4);
+    else if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 2);
+    if (col < 16 && (cells[position + 2].classList.value.match(/\bplayer[AB]\b/) || cells[position + 2].classList.value.match(/\bplayer[AB]\b/)) && !(cells[position + 3].classList.value.match(/\bwall[AB]\b/))) moves.push(position + 4);
+    else if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 2);
 
     return moves;
 }
