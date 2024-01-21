@@ -76,6 +76,7 @@ function removeWallTmp(clickedCell){
     for(let i in murAPose){
         const tmpcell = cells[murAPose[i]];
         tmpcell.classList.remove('wallTMP');
+        tmpcell.classList.remove('rotation');
         if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
             bougerMur = true;
     }
@@ -138,7 +139,7 @@ function handleWall(cellIndex) {
     if( (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/))
     ||
         ((upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
-
+        clickedCell.classList.add('rotation');
         clickedCell.classList.add('wallTMP');
         murAPose[0] = cellIndex;
         if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
@@ -153,6 +154,8 @@ function handleWall(cellIndex) {
         else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
     ||
         ((rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+            clickedCell.classList.add('rotation');
+            //clickedCell.classList.add('jambeMur');
             clickedCell.classList.add('wallTMP');
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
@@ -466,6 +469,7 @@ function validerWall(){
     const leftCell = cells[murAPose[2]];
 
     clickedCell.classList.remove('wallTMP');
+    clickedCell.classList.remove('rotation');
     rightCell.classList.remove('wallTMP');
     leftCell.classList.remove('wallTMP');
     var mur = 'wall';
@@ -491,6 +495,7 @@ function annulerWall(){
     const leftCell = cells[murAPose[2]];
 
     clickedCell.classList.remove('wallTMP');
+    clickedCell.classList.remove('rotation');
     rigthCell.classList.remove('wallTMP');
     leftCell.classList.remove('wallTMP');
     if(activePlayer === 'playerA'){
