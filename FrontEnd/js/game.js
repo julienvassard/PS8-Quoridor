@@ -44,7 +44,8 @@ for (var i = 1; i <= 289; i++) {
 
 }
 
-activateFog();
+
+
 
 let player1Position = 8;
 let player2Position = 280;
@@ -54,8 +55,15 @@ cells[player2Position].classList.add('playerB');
 
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
+
+
+activateFog();
+changeVisibilityPlayer(false,player1Position,"playerA");
+changeVisibilityPlayer(false,player2Position,"playerB");
+
 var tour = 200;
 var dernierTourB = false;
+
 cells.forEach((cell, index) => {
     if (cell.classList.contains('odd-row') || cell.classList.contains('odd-col'))
         cell.addEventListener('click', () => handleWall(index));
@@ -67,9 +75,11 @@ function removeWallTmp(clickedCell){
     var bougerMur = false;
     for(let i in murAPose){
         const tmpcell = cells[murAPose[i]];
-        tmpcell.classList.remove('wallTMP');
-        if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
+        if(tmpcell.classList.contains('wallTMP')) {
+            //if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col'))
+            tmpcell.classList.remove('wallTMP');
             bougerMur = true;
+        }
     }
     return bougerMur;
 }
@@ -81,15 +91,15 @@ function rotationWall(cellIndex){
     const downCell = cells[cellIndex - 17];
         if((rightCell.classList.contains('wallTMP') ||leftCell.classList.contains('wallTMP') )&& !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/)){
             murAPose[0] = cellIndex;
-            murAPose[1] = cellIndex+17;
-            murAPose[2] = cellIndex-17;
+            murAPose[1] = cellIndex-17;
+            murAPose[2] = cellIndex+17;
             rightCell.classList.remove('wallTMP');
             leftCell.classList.remove('wallTMP');
             upCell.classList.add('wallTMP');
             downCell.classList.add('wallTMP');
         }
         else if((upCell.classList.contains('wallTMP') ||downCell.classList.contains('wallTMP') )&& !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/)){
-            console.log('horizontale');
+
             murAPose[0] = cellIndex;
             murAPose[1] = cellIndex+1;
             murAPose[2] = cellIndex-1;
@@ -115,21 +125,21 @@ function handleWall(cellIndex) {
     const clickedCell = cells[cellIndex];
     const rightCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
-    const upCell = cells[cellIndex + 17];
-    const downCell = cells[cellIndex - 17];
+    const upCell = cells[cellIndex - 17];
+    const downCell = cells[cellIndex + 17];
     if(clickedCell.classList.contains("wallTMP") && clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
         return rotationWall(cellIndex);
     }
-    if( clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')){
+
         var bougerMur = removeWallTmp(clickedCell);
         if (bougerMur && activePlayer === 'playerA') nbWallPlayerA++;
         else if (bougerMur && activePlayer === 'playerB') nbWallPlayerB++;
-    }
+
     var poser = false;
     //pour placer a l'horizontale
     if( (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/))
     ||
-        ((upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && ( upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
         clickedCell.classList.add('wallTMP');
         murAPose[0] = cellIndex;
@@ -144,16 +154,76 @@ function handleWall(cellIndex) {
     //pour placer en verticale
         else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
     ||
-        ((rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+
             clickedCell.classList.add('wallTMP');
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
                 upCell.classList.add('wallTMP');
-            murAPose[1] = cellIndex+17;
+            murAPose[1] = cellIndex-17;
             if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
                 downCell.classList.add('wallTMP');
-            murAPose[2] = cellIndex-17;
+            murAPose[2] = cellIndex+17;
             poser = true;
+        }
+
+        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
+        {
+            //horizontale a droite
+            if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
+
+                clickedCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex;
+                if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
+                    rightCell.classList.add('wallTMP');
+                murAPose[1] = cellIndex+1;
+                if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+2].classList.contains('odd-row') || cells[cellIndex+2].classList.contains('odd-col')))
+                    cells[cellIndex+2].classList.add('wallTMP');
+                murAPose[2] = cellIndex+2;
+                poser = true;
+
+            }
+            //horizontale a gauche
+            else if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && cells[cellIndex-2].classList.contains('odd-row')){
+               
+                clickedCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex;
+               if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 2].classList.contains('odd-row') || cells[cellIndex- 2].classList.contains('odd-col')))
+                    cells[cellIndex- 2].classList.add('wallTMP');
+                murAPose[1] = cellIndex-2;
+                if(col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+                    leftCell.classList.add('wallTMP');
+                murAPose[2] = cellIndex-1;
+                poser = true;
+
+        }
+        }
+        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) //la cellule est une colonne
+        {
+            if(cells[cellIndex-34] != undefined && !cells[cellIndex-34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex-34].classList.contains('odd-col') ){
+                //verticale haut
+                clickedCell.classList.add('wallTMP');
+                murAPose[2] = cellIndex;
+                if(!cells[cellIndex- 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 34].classList.contains('odd-row') || cells[cellIndex- 34].classList.contains('odd-col')))
+                    cells[cellIndex- 34].classList.add('wallTMP');
+                murAPose[1] = cellIndex-34;
+                if(col > 0 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+                    upCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex-17;
+                poser = true;
+            }
+            else if( cells[cellIndex+34] != undefined &&!cells[cellIndex+34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+34].classList.contains('odd-col') ){
+                //verticale bas
+                clickedCell.classList.add('wallTMP');
+                murAPose[1] = cellIndex;
+                if(!cells[cellIndex+ 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+ 34].classList.contains('odd-row') || cells[cellIndex+ 34].classList.contains('odd-col')))
+                    cells[cellIndex+ 34].classList.add('wallTMP');
+                murAPose[2] = cellIndex+34;
+                if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+                    downCell.classList.add('wallTMP');
+                murAPose[0] = cellIndex+17;
+                poser = true;
+            }
         }
         if(poser) {
             showValider();
@@ -168,10 +238,10 @@ function handleWall(cellIndex) {
 
 }
 
-function changeVisibility(rigthCell,leftCell,player, horizontale){
+function changeVisibility(rigthCell,leftCell,player, horizontale) {
     rigthCellNumber = rigthCell.getAttribute('id');
     leftCellNumber = leftCell.getAttribute('id');
-    if(horizontale) {
+    if (horizontale) {
         topRightCell = cells[rigthCellNumber - 18];
         botRightCell = cells[parseInt(rigthCellNumber) + 16];
         topLeftCell = cells[leftCellNumber - 18];
@@ -181,18 +251,19 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         botRightCellPlus1 = cells[parseInt(rigthCellNumber) + 50];
         topLeftCellPlus1 = cells[leftCellNumber - 52];
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) + 50];
-    }
-    else{
-        topRightCell = cells[parseInt(rigthCellNumber) ]
-       botRightCell = cells[parseInt(rigthCellNumber) - 2];
-        topLeftCell = cells[parseInt(leftCellNumber) ];
+    } else {
+        topRightCell = cells[parseInt(rigthCellNumber)]
+        botRightCell = cells[parseInt(rigthCellNumber) - 2];
+        topLeftCell = cells[parseInt(leftCellNumber)];
         botLeftCell = cells[parseInt(leftCellNumber) - 2];
 
         topRightCellPlus1 = cells[parseInt(rigthCellNumber) + 2];
         botRightCellPlus1 = cells[parseInt(rigthCellNumber) - 4];
         topLeftCellPlus1 = cells[parseInt(leftCellNumber) + 2];
         botLeftCellPlus1 = cells[parseInt(leftCellNumber) - 4];
+        console.log(parseInt(rigthCellNumber) + " " + (parseInt(rigthCellNumber) - 2) +" " + parseInt(leftCellNumber))
     }
+
     if(player == "playerA"){
 
         if(topRightCell != undefined && topRightCell.hasAttribute('visibility'))
@@ -223,14 +294,84 @@ function changeVisibility(rigthCell,leftCell,player, horizontale){
         if(botLeftCell != undefined && botLeftCell.hasAttribute('visibility'))
             botLeftCell.setAttribute('visibility',parseInt(botLeftCell.getAttribute('visibility')) + 2);
 
-        if(topRightCellPlus1 != undefined)
+        if(topRightCellPlus1 != undefined && topRightCellPlus1.hasAttribute('visibility'))
             topRightCellPlus1.setAttribute('visibility',parseInt(topRightCellPlus1.getAttribute('visibility')) + 1);
-        if(botRightCellPlus1 != undefined)
+        if(botRightCellPlus1 != undefined && botRightCellPlus1.hasAttribute('visibility'))
             botRightCellPlus1.setAttribute('visibility',parseInt(botRightCellPlus1.getAttribute('visibility')) + 1);
-        if(topLeftCellPlus1 != undefined)
+        if(topLeftCellPlus1 != undefined && topLeftCellPlus1.hasAttribute('visibility'))
             topLeftCellPlus1.setAttribute('visibility',parseInt(topLeftCellPlus1.getAttribute('visibility')) + 1);
-        if(botLeftCellPlus1 != undefined)
+        if(botLeftCellPlus1 != undefined && botLeftCellPlus1.hasAttribute('visibility'))
             botLeftCellPlus1.setAttribute('visibility',parseInt(botLeftCellPlus1.getAttribute('visibility')) + 1);
+        }
+    }
+}
+function changeVisibilityPlayer(remove,position,player){
+    cellPlayer = cells[position];
+    cellLeft = cells[position - 2];
+    cellRight = cells[position + 2];
+    cellTop = cells[position - 34];
+    cellBot = cells[position + 34];
+    if(remove === true){
+        if(player === 'playerA') {
+            cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) + 1);
+            if (cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))) {
+                cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) + 1);
+            }
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))) {
+                cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) + 1);
+            }
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))) {
+                cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) + 1);
+            }
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))) {
+                cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) + 1);
+            }
+        }else if (player === 'playerB'){
+            cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) - 1);
+            if(cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))){
+                cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) - 1);
+            }
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))){
+                cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) - 1);
+            }
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))){
+                cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) - 1);
+            }
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))){
+                cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) - 1);
+            }
+        }
+
+    }else if(remove === false){
+        if (player === 'playerA') {
+            cellPlayer.setAttribute('visibility', parseInt(cellPlayer.getAttribute('visibility')) - 1);
+            if (cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))) {
+                cellLeft.setAttribute('visibility', parseInt(cellLeft.getAttribute('visibility')) - 1);
+            }
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))) {
+                cellRight.setAttribute('visibility', parseInt(cellRight.getAttribute('visibility')) - 1);
+            }
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))) {
+                cellTop.setAttribute('visibility', parseInt(cellTop.getAttribute('visibility')) - 1);
+            }
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))) {
+                cellBot.setAttribute('visibility', parseInt(cellBot.getAttribute('visibility')) - 1);
+            }
+        }else if (player === 'playerB'){
+            cellPlayer.setAttribute('visibility',parseInt(cellPlayer.getAttribute('visibility')) + 1);
+            if(cellLeft !== undefined && !(cells[position - 1].classList.value.match(/\bwall[AB]\b/))){
+                cellLeft.setAttribute('visibility',parseInt(cellLeft.getAttribute('visibility')) + 1);
+            }
+            if (cellRight !== undefined && !(cells[position + 1].classList.value.match(/\bwall[AB]\b/))){
+                cellRight.setAttribute('visibility',parseInt(cellRight.getAttribute('visibility')) + 1);
+            }
+            if (cellTop !== undefined && !(cells[position - 17].classList.value.match(/\bwall[AB]\b/))){
+                cellTop.setAttribute('visibility',parseInt(cellTop.getAttribute('visibility')) + 1);
+            }
+            if (cellBot !== undefined && !(cells[position + 17].classList.value.match(/\bwall[AB]\b/))){
+                cellBot.setAttribute('visibility',parseInt(cellBot.getAttribute('visibility')) + 1);
+            }
+        }
     }
 }
 
@@ -260,13 +401,16 @@ function getValidMoves(position) {
     console.log("Col : " + col);
 
     const cellFoward = cells[position + 17];
+    const cellBackward = cells[position - 17];
+    const cellLeft = cells[position - 1];
+    const cellRight = cells[position + 1];
 
 
     // Déplacements horizontaux et verticaux
-    if (row > 0) moves.push(position - 34);
+    if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 34);
     if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 34);
-    if (col > 0) moves.push(position - 2);
-    if (col < 16) moves.push(position + 2);
+    if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/))) moves.push(position - 2);
+    if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/))) moves.push(position + 2);
 
     return moves;
 }
@@ -283,9 +427,11 @@ function movePlayer(cellIndex) {
 
     // Vérifier si la cellule cliquée a la classe 'possible-move'
     if (clickedCell.classList.contains('possible-move')) {
+
         // Retirer le joueur actif de sa position actuelle
         const currentPlayerPosition = activePlayer === 'playerA' ? player1Position : player2Position;
         cells[currentPlayerPosition].classList.remove(activePlayer);
+        changeVisibilityPlayer(true,currentPlayerPosition,activePlayer);
 
         // Mettre à jour la position du joueur actif
         if (activePlayer === 'playerA') {
@@ -302,8 +448,8 @@ function movePlayer(cellIndex) {
         isClickedCell = false;
 
         // Basculer vers l'autre joueur
+        changeVisibilityPlayer(false,activePlayer === 'playerA' ? player1Position : player2Position,activePlayer);
         changeActivePlayer();
-
     }
 
 }
@@ -354,8 +500,8 @@ function changeActivePlayer() {
 function hideAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'none';
     wrapper.style.display = 'grid';
-
 }
+
 function hideValider() {
     document.querySelector('#validerA').style.display = 'none';
     document.querySelector('#validerB').style.display = 'none';
@@ -424,17 +570,29 @@ function activateFog() {
             if(cells[i].getAttribute('visibility') <= "0"){
                 cells[i].classList.remove('fog');
             }
+            if(parseInt(cells[i].getAttribute('id')) - 1 === player1Position){
+                cells[i].classList.add('playerA');
+            }
             if(cells[i].getAttribute('visibility') > "0"){
                 cells[i].classList.add('fog');
+                if(cells[i].classList.contains('playerB') && cells[i].classList.contains('fog')){
+                    cells[i].classList.remove('playerB');
+                }
             }
         }
     }else if(activePlayer == "playerB"){
         for (let i= 0;i<cells.length;i++){
+            if(parseInt(cells[i].getAttribute('id')) - 1 === player2Position){
+                cells[i].classList.add('playerB');
+            }
             if(cells[i].getAttribute('visibility') >= "0"){
                 cells[i].classList.remove('fog');
             }
             if(cells[i].getAttribute('visibility') < "0"){
                 cells[i].classList.add('fog');
+                if(cells[i].classList.contains('playerA') && cells[i].classList.contains('fog')){
+                    cells[i].classList.remove('playerA');
+                }
             }
         }
     }
