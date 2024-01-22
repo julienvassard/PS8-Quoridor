@@ -92,7 +92,6 @@ body {
 
     /*grid-template-columns: repeat(17, 40px);
     grid-template-rows: repeat(17, 40px);*/
-    gap: 2px;
     justify-content: center;
 }
 
