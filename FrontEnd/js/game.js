@@ -54,7 +54,7 @@ cells[player2Position].classList.add('playerB');
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 
-
+dijkstraVisitedNode = [];
 activateFog();
 changeVisibilityPlayer(false, player1Position, "playerA");
 changeVisibilityPlayer(false, player2Position, "playerB");
@@ -241,7 +241,7 @@ function handleWall(cellIndex) {
             }
         }
         if(poser) {
-            showValider();
+
             if (activePlayer === 'playerA') {
                 nbWallPlayerA--;
                 document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
@@ -249,6 +249,12 @@ function handleWall(cellIndex) {
                 nbWallPlayerB--;
                 document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
             }
+        }
+        if(wallPlacable()===0){
+            showValider();
+        }else{
+            alert("Vous ne pouvez pas poser ce mur au risque de bloquer un joueur");
+            annulerWall();
         }
 }
 
@@ -631,5 +637,66 @@ function activateFog() {
                 }
             }
         }
+    }
+}
+var tableauGrid;
+
+function wallPlacable(){
+    dijkstraVisitedNode = [];
+    var tab ={};
+    for(var i =0;i<cells.length;i=i+2){
+
+        var tmp = [];
+        if(cells[i-1] != undefined && (!cells[i-1].classList.value.match(/\bwall[AB]\b/) && !cells[i-1].classList.contains('wallTMP'))){//il n'y a pas de mur a gauche
+
+            tmp.push((i+1)-2);
+        }
+        if(cells[i+1] != undefined && (!cells[i+1].classList.value.match(/\bwall[AB]\b/) && !cells[i+1].classList.contains('wallTMP'))){//il n'y a pas de mur a droite
+            tmp.push((i+1)+2);
+        }
+        if(cells[i-17] != undefined && (!cells[i-17].classList.value.match(/\bwall[AB]\b/) && !cells[i-17].classList.contains('wallTMP'))){//il n'y a pas de mur au dessus
+            tmp.push((i+1)-34);
+        }
+        if(cells[i+17] != undefined && (!cells[i+17].classList.value.match(/\bwall[AB]\b/)&& !cells[i+17].classList.contains('wallTMP'))){//il n'y a pas de mur en dessous
+            tmp.push(i+1+34);
+        }
+        tab[""+(i+1)]=tmp;
+    }
+    tableauGrid = tab;
+    if(activePlayer === 'playerA'){
+        return dijkstra(player1Position+1,tab);
+    }else{
+        return dijkstra(player2Position+1,tab);
+    }
+
+}
+
+function dijkstra(cellule,tab) {
+    var lanePlayerAArray = Array.from(lanePlayerA);
+    var lanePlayerBArray = Array.from(lanePlayerB);
+
+    if (activePlayer === 'playerA') {
+
+        if (lanePlayerBArray.includes(document.getElementById('' + cellule))) {
+
+            return 0;
+        }
+    }
+    if (activePlayer === 'playerB') {
+        if (lanePlayerAArray.includes(document.getElementById('' + cellule))) {
+
+            return 0;
+        }
+    }
+    if (dijkstraVisitedNode.includes(cellule)) {
+
+        return 999;
+    } else {
+        var tmpTab = [];
+        dijkstraVisitedNode.push(cellule);
+        for (var voisin in tab['' + cellule]) {
+            tmpTab.push(dijkstra(tab["" + cellule][voisin], tab));
+        }
+        return Math.min.apply(null, tmpTab);
     }
 }
