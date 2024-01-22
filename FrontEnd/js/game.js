@@ -398,6 +398,20 @@ function changeVisibilityPlayer(remove,position,player){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
+    console.log(validMoves.length);
+    if(activePlayer === 'playerA'){
+        if(validMoves.length == 0 && nbWallPlayerA===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+    else if(activePlayer ==='playerB'){
+        if(validMoves.length == 0 && nbWallPlayerB===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+
     if (isClickedCell) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
         isClickedCell = false;
