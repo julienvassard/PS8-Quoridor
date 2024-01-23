@@ -76,7 +76,7 @@ function removeWallTmp(){
         const tmpcell = cells[murAPose[i]];
         if(tmpcell.classList.contains('wallTMP')) {
             tmpcell.classList.remove('wallTMP');
-
+            tmpcell.classList.remove('rotation');
             bougerMur = true;
         }
     }
@@ -144,8 +144,8 @@ function handleWall(cellIndex) {
     ||
         (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && ( upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
-
         clickedCell.classList.add('wallTMP');
+        clickedCell.classList.add('rotation');
         murAPose[0] = cellIndex;
         if (col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
             rightCell.classList.add('wallTMP');
@@ -162,6 +162,8 @@ function handleWall(cellIndex) {
         (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
             clickedCell.classList.add('wallTMP');
+            clickedCell.classList.add('rotation');
+            //clickedCell.classList.add('jambeMur');
             murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
                 upCell.classList.add('wallTMP');
@@ -178,13 +180,15 @@ function handleWall(cellIndex) {
             if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
 
                 clickedCell.classList.add('wallTMP');
-                murAPose[0] = cellIndex;
-                if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
+                murAPose[2] = cellIndex;
+                if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col'))) {
                     rightCell.classList.add('wallTMP');
-                murAPose[1] = cellIndex+1;
+                    rightCell.classList.add('rotation');
+                }
+                murAPose[0] = cellIndex+1;
                 if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+2].classList.contains('odd-row') || cells[cellIndex+2].classList.contains('odd-col')))
                     cells[cellIndex+2].classList.add('wallTMP');
-                murAPose[2] = cellIndex+2;
+                murAPose[1] = cellIndex+2;
                 poser = true;
 
             }
@@ -192,13 +196,15 @@ function handleWall(cellIndex) {
             else if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && cells[cellIndex-2].classList.contains('odd-row')){
                
                 clickedCell.classList.add('wallTMP');
-                murAPose[0] = cellIndex;
+                murAPose[1] = cellIndex;
                if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 2].classList.contains('odd-row') || cells[cellIndex- 2].classList.contains('odd-col')))
                     cells[cellIndex- 2].classList.add('wallTMP');
-                murAPose[1] = cellIndex-2;
-                if(col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+                murAPose[2] = cellIndex-2;
+                if(col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col'))) {
                     leftCell.classList.add('wallTMP');
-                murAPose[2] = cellIndex-1;
+                    leftCell.classList.add('rotation');
+                }
+                murAPose[0] = cellIndex-1;
                 poser = true;
 
         }
@@ -212,8 +218,10 @@ function handleWall(cellIndex) {
                 if(!cells[cellIndex- 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 34].classList.contains('odd-row') || cells[cellIndex- 34].classList.contains('odd-col')))
                     cells[cellIndex- 34].classList.add('wallTMP');
                 murAPose[1] = cellIndex-34;
-                if(col > 0 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+                if(col > 0 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col'))) {
                     upCell.classList.add('wallTMP');
+                    upCell.classList.add('rotation');
+                }
                 murAPose[0] = cellIndex-17;
                 poser = true;
             }
@@ -224,8 +232,10 @@ function handleWall(cellIndex) {
                 if(!cells[cellIndex+ 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+ 34].classList.contains('odd-row') || cells[cellIndex+ 34].classList.contains('odd-col')))
                     cells[cellIndex+ 34].classList.add('wallTMP');
                 murAPose[2] = cellIndex+34;
-                if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+                if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col'))) {
                     downCell.classList.add('wallTMP');
+                    downCell.classList.add('rotation');
+                }
                 murAPose[0] = cellIndex+17;
                 poser = true;
             }
@@ -414,7 +424,6 @@ function getValidMoves(position) {
     const cellLeftPlus1 = cells[position - 2];
     const cellRightPlus1 = cells[position + 2];
 
-
     if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))){
         if(cellBackwardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellBackwardPlus1.classList.value.match(/\bplayer[AB]Fog\b/)){
             if(!(cells[position - 51].classList.value.match(/\bwall[AB]\b/)))
@@ -443,6 +452,7 @@ function getValidMoves(position) {
         } else
             moves.push(position + 2);
     }
+
 
 
     return moves;
@@ -559,6 +569,7 @@ function validerWall() {
     const leftCell = cells[murAPose[2]];
 
     clickedCell.classList.remove('wallTMP');
+    clickedCell.classList.remove('rotation');
     rightCell.classList.remove('wallTMP');
     leftCell.classList.remove('wallTMP');
     var mur = 'wall';
@@ -585,6 +596,7 @@ function annulerWall() {
     const leftCell = cells[murAPose[2]];
 
     clickedCell.classList.remove('wallTMP');
+    clickedCell.classList.remove('rotation');
     rigthCell.classList.remove('wallTMP');
     leftCell.classList.remove('wallTMP');
     if (activePlayer === 'playerA') {

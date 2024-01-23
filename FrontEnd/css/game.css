@@ -92,7 +92,6 @@ body {
 
     /*grid-template-columns: repeat(17, 40px);
     grid-template-rows: repeat(17, 40px);*/
-    gap: 2px;
     justify-content: center;
 }
 
@@ -171,6 +170,17 @@ h3 {
 
 }
 
+.rotation {
+    background: url('../images/rotation.png') no-repeat center center; /* Remplacez le chemin par le chemin réel de votre image */
+    background-size: cover; /* Ajustez selon vos besoins */
+    width: 22px;
+    height: 22px;
+    z-index: 10;
+    margin-left: -6px;
+    margin-top: -6px;
+    padding: unset;
+}
+
 
 .wallA {
     background-color: #0048ff;
@@ -178,8 +188,24 @@ h3 {
 }
 .wallB {
     background-color: #ff0000;
-    padding: 2px;
+    /*background: url("../images/murs-jambes-horizontal.png") no-repeat center center;
+    background-size: cover;
+    margin-left: 2px;
+    margin-top: -9px;
+    width: 25px;
+    height: 25px;
+    z-index: 9;*/
 }
+
+/*.jambeMur{
+    background: url("../images/murs-jambes-vertical.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -9px;
+    margin-top: 2px;
+    width: 25px;
+    height: 25px;
+    z-index: 9;
+}*/
 
 .valider{
 background-color: #f1c758;
