@@ -424,16 +424,35 @@ function getValidMoves(position) {
     const cellLeftPlus1 = cells[position - 2];
     const cellRightPlus1 = cells[position + 2];
 
+    if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/))){
+        if(cellBackwardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellBackwardPlus1.classList.value.match(/\bplayer[AB]Fog\b/)){
+            if(!(cells[position - 51].classList.value.match(/\bwall[AB]\b/)))
+                moves.push(position - 68);
+        } else
+            moves.push(position - 34);
+    }
+    if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/))){
+        if(cellFowardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellFowardPlus1.classList.value.match(/\bplayer[AB]Fog\b/)){
+            if(!(cells[position + 51].classList.value.match(/\bwall[AB]\b/)))
+                moves.push(position + 68);
+        } else
+            moves.push(position + 34);
+    }
+    if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/))){
+        if(cellLeftPlus1.classList.value.match(/\bplayer[AB]\b/) || cellLeftPlus1.classList.value.match(/\bplayer[AB]Fog\b/)){
+            if(!(cells[position - 3].classList.value.match(/\bwall[AB]\b/)))
+                moves.push(position - 4);
+        } else
+            moves.push(position - 2);
+    }
+    if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/))){
+        if(cellRightPlus1.classList.value.match(/\bplayer[AB]\b/) || cellRightPlus1.classList.value.match(/\bplayer[AB]Fog\b/)){
+            if(!(cells[position + 3].classList.value.match(/\bwall[AB]\b/)))
+                moves.push(position + 4);
+        } else
+            moves.push(position + 2);
+    }
 
-    //deplacement du joueur
-    if (row > 0 && (cellBackwardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellBackwardPlus1.classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position - 51].classList.value.match(/\bwall[AB]\b/))) moves.push(position - 68);
-    else if (row > 0 && !(cellBackward.classList.value.match(/\bwall[AB]\b/)) && !(cellBackwardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellBackwardPlus1.classList.value.match(/\bplayer[AB]Fog\b/))) moves.push(position - 34);
-    if (row < 16 && (cellFowardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellFowardPlus1.classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position + 51].classList.value.match(/\bwall[AB]\b/))) moves.push(position + 68);
-    else if (row < 16 && !(cellFoward.classList.value.match(/\bwall[AB]\b/)) && !(cellFowardPlus1.classList.value.match(/\bplayer[AB]\b/) || cellFowardPlus1.classList.value.match(/\bplayer[AB]Fog\b/))) moves.push(position + 34);
-    if (col > 0 && (cellLeftPlus1.classList.value.match(/\bplayer[AB]\b/) || cellLeftPlus1.classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position - 3].classList.value.match(/\bwall[AB]\b/))) moves.push(position - 4);
-    else if (col > 0 && !(cellLeft.classList.value.match(/\bwall[AB]\b/)) && !(cellLeftPlus1.classList.value.match(/\bplayer[AB]\b/) || cellLeftPlus1.classList.value.match(/\bplayer[AB]Fog\b/))) moves.push(position - 2);
-    if (col < 16 && (cellRightPlus1.classList.value.match(/\bplayer[AB]\b/) || cellRightPlus1.classList.value.match(/\bplayer[AB]Fog\b/)) && !(cells[position + 3].classList.value.match(/\bwall[AB]\b/))) moves.push(position + 4);
-    else if (col < 16 && !(cellRight.classList.value.match(/\bwall[AB]\b/)) && !(cellRightPlus1.classList.value.match(/\bplayer[AB]\b/) || cellRightPlus1.classList.value.match(/\bplayer[AB]Fog\b/))) moves.push(position + 2);
 
 
     return moves;
