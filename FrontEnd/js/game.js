@@ -6,6 +6,7 @@ var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
 let isClickedCell = false;
 let murAPose = new Array(3);
+var croisementWall = false;
 hideAntiCheat();
 hideValider();
 // Générez les 81 div et ajoutez-les à la div wrapper
@@ -76,7 +77,10 @@ function removeWallTmp(){
         const tmpcell = cells[murAPose[i]];
         if(tmpcell.classList.contains('wallTMP')) {
             tmpcell.classList.remove('wallTMP');
-            tmpcell.classList.remove('rotation');
+            tmpcell.classList.remove('jambeMur');
+            tmpcell.classList.remove('jambeMurVertical');
+            tmpcell.classList.remove('jambeHorizontalInter');
+            tmpcell.classList.remove('jambeVerticalInter');
             bougerMur = true;
         }
     }
@@ -84,6 +88,7 @@ function removeWallTmp(){
 }
 
 function rotationWall(cellIndex) {
+    const clickedCell = cells[cellIndex];
     const rightCell = cells[cellIndex + 1];
     const leftCell = cells[cellIndex - 1];
     const upCell = cells[cellIndex + 17];
@@ -94,8 +99,10 @@ function rotationWall(cellIndex) {
             murAPose[2] = cellIndex+17;
             rightCell.classList.remove('wallTMP');
             leftCell.classList.remove('wallTMP');
+            clickedCell.classList.remove('jambeMur');
             upCell.classList.add('wallTMP');
             downCell.classList.add('wallTMP');
+            clickedCell.classList.add('jambeMurVertical');
         }
         else if((upCell.classList.contains('wallTMP') ||downCell.classList.contains('wallTMP') )&& !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/)){
 
@@ -104,13 +111,16 @@ function rotationWall(cellIndex) {
             murAPose[2] = cellIndex-1;
             upCell.classList.remove('wallTMP');
             downCell.classList.remove('wallTMP');
+            clickedCell.classList.remove('jambeMurVertical');
             rightCell.classList.add('wallTMP');
             leftCell.classList.add('wallTMP');
+            clickedCell.classList.add('jambeMur');
         }
 
 }
 
 function handleWall(cellIndex) {
+    croisementWall = false;
     if (isClickedCell) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
         isClickedCell = false;
@@ -140,12 +150,10 @@ function handleWall(cellIndex) {
     var poser = false;
     //pour placer a l'horizontale
 
-    if( (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/))
-    ||
-        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && ( upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
-
+    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/)&& !downCell.classList.value.match(/\bwall[AB]\b/)){
+        console.log("ICIIIIIIIIIIII");
         clickedCell.classList.add('wallTMP');
-        clickedCell.classList.add('rotation');
+        clickedCell.classList.add('jambeMur');
         murAPose[0] = cellIndex;
         if (col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
             rightCell.classList.add('wallTMP');
@@ -155,16 +163,30 @@ function handleWall(cellIndex) {
         murAPose[2] = cellIndex - 1;
         poser = true;
     }
+
+    else if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && ( upCell.classList.value.match(/\bwall[AB]\b/) || downCell.classList.value.match(/\bwall[AB]\b/)) && !rightCell.classList.value.match(/\bwall[AB]\b/) && !leftCell.classList.value.match(/\bwall[AB]\b/)) {// soit cliquer a cote d'un mur horizontale
+        console.log("ICIIIIIIIIIIII else");
+        croisementWall = true;
+        clickedCell.classList.add('wallTMP');
+        murAPose[0] = cellIndex;
+        if (col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col')))
+            rightCell.classList.add('wallTMP');
+            rightCell.classList.add('jambeHorizontalInter');
+        murAPose[1] = cellIndex + 1;
+        if (col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col')))
+            leftCell.classList.add('wallTMP');
+        murAPose[2] = cellIndex - 1;
+        poser = true;
+    }
+
     //pour placer en verticale
 
-        else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
-    ||
-        (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
+    if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && !rightCell.classList.value.match(/\bwall[AB]\b/)&& !leftCell.classList.value.match(/\bwall[AB]\b/) && clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/)){// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
+        console.log("ICIIIIIIIIIIII");
+        clickedCell.classList.add('wallTMP');
+        clickedCell.classList.add('jambeMurVertical');
 
-            clickedCell.classList.add('wallTMP');
-            clickedCell.classList.add('rotation');
-            //clickedCell.classList.add('jambeMur');
-            murAPose[0] = cellIndex;
+        murAPose[0] = cellIndex;
             if(col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
                 upCell.classList.add('wallTMP');
             murAPose[1] = cellIndex-17;
@@ -174,7 +196,22 @@ function handleWall(cellIndex) {
             poser = true;
         }
 
-        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
+    else if(clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/)) {// soit cliquer a cote d'un mur horizontale
+        croisementWall = true;
+        console.log("ICIIIIIIIIIIII else");
+        clickedCell.classList.add('wallTMP');
+
+        murAPose[0] = cellIndex;
+        if (col < 16 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col')))
+            upCell.classList.add('wallTMP');
+            upCell.classList.add('jambeVerticalInter');
+        murAPose[1] = cellIndex - 17;
+        if (col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col')))
+            downCell.classList.add('wallTMP');
+        murAPose[2] = cellIndex + 17;
+        poser = true;
+    }
+    else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
         {
             //horizontale a droite
             if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
@@ -183,7 +220,8 @@ function handleWall(cellIndex) {
                 murAPose[2] = cellIndex;
                 if(col < 16 && !rightCell.classList.value.match(/\bwall[AB]\b/) && (rightCell.classList.contains('odd-row') || rightCell.classList.contains('odd-col'))) {
                     rightCell.classList.add('wallTMP');
-                    rightCell.classList.add('rotation');
+                    rightCell.classList.add('jambeMur');
+
                 }
                 murAPose[0] = cellIndex+1;
                 if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+2].classList.contains('odd-row') || cells[cellIndex+2].classList.contains('odd-col')))
@@ -202,7 +240,7 @@ function handleWall(cellIndex) {
                 murAPose[2] = cellIndex-2;
                 if(col > 0 && !leftCell.classList.value.match(/\bwall[AB]\b/) && (leftCell.classList.contains('odd-row') || leftCell.classList.contains('odd-col'))) {
                     leftCell.classList.add('wallTMP');
-                    leftCell.classList.add('rotation');
+                    leftCell.classList.add('jambeMur');
                 }
                 murAPose[0] = cellIndex-1;
                 poser = true;
@@ -220,7 +258,7 @@ function handleWall(cellIndex) {
                 murAPose[1] = cellIndex-34;
                 if(col > 0 && !upCell.classList.value.match(/\bwall[AB]\b/) && (upCell.classList.contains('odd-row') || upCell.classList.contains('odd-col'))) {
                     upCell.classList.add('wallTMP');
-                    upCell.classList.add('rotation');
+                    upCell.classList.add('jambeMurVertical');
                 }
                 murAPose[0] = cellIndex-17;
                 poser = true;
@@ -234,12 +272,20 @@ function handleWall(cellIndex) {
                 murAPose[2] = cellIndex+34;
                 if(col > 0 && !downCell.classList.value.match(/\bwall[AB]\b/) && (downCell.classList.contains('odd-row') || downCell.classList.contains('odd-col'))) {
                     downCell.classList.add('wallTMP');
-                    downCell.classList.add('rotation');
+                    downCell.classList.add('jambeMurVertical');
                 }
                 murAPose[0] = cellIndex+17;
                 poser = true;
             }
         }
+
+    console.log("Cell Index:", cellIndex);
+    console.log("Col:", col);
+    console.log("Clicked Cell Classes:", clickedCell.classList.value);
+    console.log("Up Cell Classes:", upCell.classList.value);
+    console.log("Down Cell Classes:", downCell.classList.value);
+    console.log("Right Cell Classes:", rightCell.classList.value);
+    console.log("Left Cell Classes:", leftCell.classList.value);
         if(poser) {
             showValider();
             if (activePlayer === 'playerA') {
@@ -490,7 +536,6 @@ function checkCrossing(playerAPosition, playerBPosition) {
 
             if (dernierTourB) {
                 gagneA = true;
-
             }
             if (!dernierTourB) {
                 dernierTourB = true;
@@ -548,23 +593,71 @@ function validerWall() {
     const clickedCell = cells[murAPose[0]];
     const rightCell = cells[murAPose[1]];
     const leftCell = cells[murAPose[2]];
+    const upCell = cells[murAPose[0] - 17];
+    const downCell = cells[murAPose[0] + 17];
 
-    clickedCell.classList.remove('wallTMP');
-    clickedCell.classList.remove('rotation');
-    rightCell.classList.remove('wallTMP');
-    leftCell.classList.remove('wallTMP');
-    var mur = 'wall';
-    if (activePlayer === 'playerA')
-        mur += 'A';
-    else
-        mur += 'B';
-    clickedCell.classList.add(mur);
-    rightCell.classList.add(mur);
-    leftCell.classList.add(mur);
     var horizontale = false;
     if (murAPose[1] - murAPose[0] === 1) {
         horizontale = true;
     }
+
+    clickedCell.classList.remove('wallTMP');
+    clickedCell.classList.remove('jambeMur');
+    clickedCell.classList.remove('jambeMurVertical');
+    rightCell.classList.remove('wallTMP');
+    rightCell.classList.remove('jambeHorizontalInter');
+    leftCell.classList.remove('wallTMP');
+    leftCell.classList.remove('jambeHorizontalInter');
+    upCell.classList.remove('jambeVerticalInter');
+    downCell.classList.remove('jambeVerticalInter');
+    var mur = 'wall';
+    var murVertical = 'wallVertical';
+    var murHorizontal = 'wallHorizontal';
+    var murHorizontalInter = 'wallHorizontalInter';
+    var murVerticalInter = 'wallVerticalInter';
+    if (activePlayer === 'playerA') {
+        mur += 'A';
+        murVertical += 'A';
+        murHorizontal += 'A';
+        murHorizontalInter += 'A';
+        murVerticalInter += 'A';
+    }
+    else {
+        mur += 'B';
+        murVertical += 'B';
+        murHorizontal += 'B';
+        murHorizontalInter += 'B';
+        murVerticalInter += 'B';
+    }
+
+    if(horizontale && !croisementWall){
+        clickedCell.classList.add(murHorizontal);
+        rightCell.classList.add(mur);
+        leftCell.classList.add(mur);
+        console.log("horizontale");
+    }
+    else if(!horizontale && !croisementWall){
+        clickedCell.classList.add(murVertical);
+        upCell.classList.add(mur);
+        downCell.classList.add(mur);
+        console.log("vertical");
+    }
+    else if(horizontale && croisementWall){
+        rightCell.classList.add(murHorizontalInter);
+        rightCell.classList.add(mur);
+        leftCell.classList.add(mur);
+        console.log("horizontale croisement");
+    }
+    else if(!horizontale && croisementWall){
+        upCell.classList.add(mur);
+        downCell.classList.add(mur);
+        upCell.classList.add(murVerticalInter);
+        console.log("vertical croisement");
+    }
+    /*clickedCell.classList.add(mur);
+    clickedCell.classList.add(murHorizontal);
+    rightCell.classList.add(mur);
+    leftCell.classList.add(mur);*/
 
     changeVisibility(rightCell, leftCell, activePlayer, horizontale);
     changeActivePlayer();
@@ -575,11 +668,18 @@ function annulerWall() {
     const clickedCell = cells[murAPose[0]];
     const rigthCell = cells[murAPose[1]];
     const leftCell = cells[murAPose[2]];
+    const upCell = cells[murAPose[0] - 17];
+    const downCell = cells[murAPose[0] + 17];
 
     clickedCell.classList.remove('wallTMP');
-    clickedCell.classList.remove('rotation');
+    clickedCell.classList.remove('jambeMur');
+    clickedCell.classList.remove('jambeMurVertical');
     rigthCell.classList.remove('wallTMP');
+    rigthCell.classList.remove('jambeHorizontalInter');
     leftCell.classList.remove('wallTMP');
+    leftCell.classList.remove('jambeHorizontalInter');
+    upCell.classList.remove('jambeVerticalInter');
+    downCell.classList.remove('jambeVerticalInter');
     if (activePlayer === 'playerA') {
         nbWallPlayerA++;
         document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;

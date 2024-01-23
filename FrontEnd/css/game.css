@@ -170,24 +170,34 @@ h3 {
 
 }
 
-.rotation {
-    background: url('../images/rotation.png') no-repeat center center; /* Remplacez le chemin par le chemin réel de votre image */
-    background-size: cover; /* Ajustez selon vos besoins */
-    width: 22px;
-    height: 22px;
-    z-index: 10;
-    margin-left: -6px;
-    margin-top: -6px;
-    padding: unset;
-}
-
 
 .wallA {
     background-color: #0048ff;
     padding: 2px;
 }
+
+.wallVerticalA{
+    background: url("../images/murs-jambes-vertical-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -23px;
+    margin-top: -64px;
+    width: 70px;
+    height: 135px;
+    z-index: 8;
+}
+
+.wallHorizontalA{
+    background: url("../images/murs-jambes-horizontal-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -64px;
+    margin-top: -37px;
+    width: 135px;
+    height: 70px;
+    z-index: 9;
+}
 .wallB {
     background-color: #ff0000;
+
     /*background: url("../images/murs-jambes-horizontal.png") no-repeat center center;
     background-size: cover;
     margin-left: 2px;
@@ -197,15 +207,116 @@ h3 {
     z-index: 9;*/
 }
 
-/*.jambeMur{
+.wallVerticalB{
+    background: url("../images/murs-jambes-vertical-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -23px;
+    margin-top: -62px;
+    width: 70px;
+    height: 130px;
+    z-index: 8;
+}
+
+.wallHorizontalB{
+    background: url("../images/murs-jambes-horizontal-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -64px;
+    margin-top: -37px;
+    width: 135px;
+    height: 70px;
+    z-index: 9;
+}
+
+.wallVerticalInterA{
+    background: url("../images/murs-jambes-vertical-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -23px;
+    margin-top: -7px;
+    width: 70px;
+    height: 135px;
+    z-index: 15;
+}
+
+.wallHorizontalInterA{
+    background: url("../images/murs-jambes-horizontal-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -75px;
+    margin-top: -37px;
+    width: 135px;
+    height: 70px;
+    z-index: 15;
+}
+
+.wallVerticalInterB{
+    background: url("../images/murs-jambes-vertical-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -23px;
+    margin-top: -7px;
+    width: 70px;
+    height: 135px;
+    z-index: 15;
+}
+
+.wallHorizontalInterB{
+    background: url("../images/murs-jambes-horizontal-sr.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -75px;
+    margin-top: -37px;
+    width: 135px;
+    height: 70px;
+    z-index: 15;
+}
+
+.rotation {
+    background: url('../images/rotation.png') no-repeat center center; /* Remplacez le chemin par le chemin réel de votre image */
+    background-size: cover; /* Ajustez selon vos besoins */
+    width: 22px;
+    height: 22px;
+    z-index: 5;
+    margin-left: -6px;
+    margin-top: -6px;
+    padding: unset;
+}
+
+.jambeMur{
+    background: url("../images/murs-jambes-horizontal.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -67px;
+    margin-top: -38px;
+    width: 135px;
+    height: 70px;
+    z-index: 9;
+}
+
+.jambeMurVertical{
     background: url("../images/murs-jambes-vertical.png") no-repeat center center;
     background-size: cover;
-    margin-left: -9px;
-    margin-top: 2px;
-    width: 25px;
-    height: 25px;
-    z-index: 9;
-}*/
+    margin-left: -23px;
+    margin-top: -64px;
+    width: 70px;
+    height: 135px;
+    z-index: 8;
+}
+
+.jambeVerticalInter{
+    background: url("../images/murs-jambes-vertical.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -23px;
+    margin-top: -7px;
+    width: 70px;
+    height: 135px;
+    z-index: 15;
+}
+
+.jambeHorizontalInter{
+    background: url("../images/murs-jambes-horizontal.png") no-repeat center center;
+    background-size: cover;
+    margin-left: -75px;
+    margin-top: -37px;
+    width: 135px;
+    height: 70px;
+    z-index: 15;
+}
 
 .valider{
 background-color: #f1c758;
