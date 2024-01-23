@@ -6,8 +6,7 @@ var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
 let isClickedCell = false;
 let murAPose = new Array(3);
-hideAntiCheat();
-hideValider();
+
 // Générez les 81 div et ajoutez-les à la div wrapper
 for (var i = 1; i <= 289; i++) {
     var newDiv = document.createElement('div');
@@ -50,7 +49,8 @@ let player2Position = 280;
 cells[player1Position].classList.add('playerA');
 cells[player2Position].classList.add('playerB');
 
-
+hideAntiCheat();
+hideValider();
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 
@@ -398,19 +398,7 @@ function changeVisibilityPlayer(remove,position,player){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
-    console.log(validMoves.length);
-    if(activePlayer === 'playerA'){
-        if(validMoves.length == 0 && nbWallPlayerA===0){
-            alert("passage de tour");
-            changeActivePlayer();
-        }
-    }
-    else if(activePlayer ==='playerB'){
-        if(validMoves.length == 0 && nbWallPlayerB===0){
-            alert("passage de tour");
-            changeActivePlayer();
-        }
-    }
+
 
     if (isClickedCell) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
@@ -541,12 +529,33 @@ function changeActivePlayer() {
     activateFog();
     checkCrossing(player1Position, player2Position);
     tour--;
-}
 
+
+}
+function checkNoMove(){
+
+    if(activePlayer === 'playerA'){
+        const validMoves = getValidMoves(player1Position);
+        if(validMoves.length == 0 && nbWallPlayerA===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+    else if(activePlayer ==='playerB'){
+        const validMoves = getValidMoves(player2Position);
+        if(validMoves.length == 0 && nbWallPlayerB===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+}
 function hideAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'none';
     wrapper.style.display = 'grid';
+    setTimeout(checkNoMove,3000);
 }
+
+
 
 function hideValider() {
     document.querySelector('#validerA').style.display = 'none';
