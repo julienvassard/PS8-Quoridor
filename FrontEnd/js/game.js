@@ -157,7 +157,7 @@ function handleWall(cellIndex) {
     }
     //pour placer en verticale
 
-        else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
+        else if( ((clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) && clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
     ||
         (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
@@ -174,7 +174,7 @@ function handleWall(cellIndex) {
             poser = true;
         }
 
-        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
+        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/)) //la cellule est une ligne
         {
             //horizontale a droite
             if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
@@ -194,7 +194,7 @@ function handleWall(cellIndex) {
             }
             //horizontale a gauche
             else if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && cells[cellIndex-2].classList.contains('odd-row')){
-               
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[1] = cellIndex;
                if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 2].classList.contains('odd-row') || cells[cellIndex- 2].classList.contains('odd-col')))
@@ -209,10 +209,11 @@ function handleWall(cellIndex) {
 
         }
         }
-        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) //la cellule est une colonne
+        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')&& !clickedCell.classList.value.match(/\bwall[AB]\b/)) //la cellule est une colonne
         {
             if(cells[cellIndex-34] != undefined && !cells[cellIndex-34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex-34].classList.contains('odd-col') ){
                 //verticale haut
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[2] = cellIndex;
                 if(!cells[cellIndex- 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 34].classList.contains('odd-row') || cells[cellIndex- 34].classList.contains('odd-col')))
@@ -227,6 +228,7 @@ function handleWall(cellIndex) {
             }
             else if( cells[cellIndex+34] != undefined &&!cells[cellIndex+34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+34].classList.contains('odd-col') ){
                 //verticale bas
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[1] = cellIndex;
                 if(!cells[cellIndex+ 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+ 34].classList.contains('odd-row') || cells[cellIndex+ 34].classList.contains('odd-col')))
@@ -241,7 +243,6 @@ function handleWall(cellIndex) {
             }
         }
         if(poser) {
-
             if (activePlayer === 'playerA') {
                 nbWallPlayerA--;
                 document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
@@ -249,13 +250,14 @@ function handleWall(cellIndex) {
                 nbWallPlayerB--;
                 document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
             }
+            if(wallPlacable()===0){
+                showValider();
+            }else{
+                alert("Vous ne pouvez pas poser ce mur au risque de bloquer un joueur");
+                annulerWall();
+            }
         }
-        if(wallPlacable()===0){
-            showValider();
-        }else{
-            alert("Vous ne pouvez pas poser ce mur au risque de bloquer un joueur");
-            annulerWall();
-        }
+
 }
 
 function changeVisibility(rigthCell, leftCell, player, horizontale) {
@@ -662,7 +664,7 @@ function activateFog() {
         }
     }
 }
-var tableauGrid;
+
 
 function wallPlacable(){
     dijkstraVisitedNode = [];
@@ -685,27 +687,25 @@ function wallPlacable(){
         }
         tab[""+(i+1)]=tmp;
     }
-    tableauGrid = tab;
-    if(activePlayer === 'playerA'){
-        return dijkstra(player1Position+1,tab);
-    }else{
-        return dijkstra(player2Position+1,tab);
-    }
-
+   var res1 = dijkstra("playerA",player1Position+1,tab);
+    dijkstraVisitedNode = [];
+    var res2 = dijkstra("playerB",player2Position+1,tab)
+    var res = Math.max(res1, res2);
+    return  res;
 }
 
-function dijkstra(cellule,tab) {
+function dijkstra(player,cellule,tab) {
     var lanePlayerAArray = Array.from(lanePlayerA);
     var lanePlayerBArray = Array.from(lanePlayerB);
-
-    if (activePlayer === 'playerA') {
+    if (player === 'playerA') {
 
         if (lanePlayerBArray.includes(document.getElementById('' + cellule))) {
 
             return 0;
         }
     }
-    if (activePlayer === 'playerB') {
+    if (player === 'playerB') {
+
         if (lanePlayerAArray.includes(document.getElementById('' + cellule))) {
 
             return 0;
@@ -718,7 +718,7 @@ function dijkstra(cellule,tab) {
         var tmpTab = [];
         dijkstraVisitedNode.push(cellule);
         for (var voisin in tab['' + cellule]) {
-            tmpTab.push(dijkstra(tab["" + cellule][voisin], tab));
+            tmpTab.push(dijkstra(player,tab["" + cellule][voisin], tab));
         }
         return Math.min.apply(null, tmpTab);
     }
