@@ -2,7 +2,6 @@ body {
     background-image: url('../images/fond-stade.png');
     background-size: cover;
     background-repeat: no-repeat;
-    background-attachment: fixed;
     background-position: center;
 }
 
@@ -30,6 +29,19 @@ body {
     justify-content: flex-end;
     height: 9%;
     margin-top: 10px;
+}
+
+.message{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1b418c;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'Roboto Condensed', sans-serif;
+    text-align: center;
 }
 
 #param {
@@ -107,6 +119,11 @@ body {
 
 .top-row, .bot-row {
     background-color: #cecece;
+}
+
+/*ajouter un hover sur les cases top et bot*/
+.first-turn:hover {
+    background-color: #757575;
 }
 
 .fog {

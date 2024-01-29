@@ -6,6 +6,7 @@ var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
 let isClickedCell = false;
 let murAPose = new Array(3);
+let firstTurn = true;
 hideAntiCheat();
 hideValider();
 // Générez les 81 div et ajoutez-les à la div wrapper
@@ -69,6 +70,20 @@ cells.forEach((cell, index) => {
         cell.addEventListener('click', () => movePlayer(index));
 });
 
+if(tour === 200){
+    const topRows = document.querySelectorAll('.top-row');
+    topRows.forEach(row => row.classList.add('first-turn'));
+
+    // Afficher le message pour le premier tour
+    const message = document.createElement('div');
+    message.innerHTML = '1er tour !<br> Placez votre joueur sur une case de la ligne de départ';
+    message.classList.add('message');
+    wrapper.appendChild(message);
+    //si une case de top-row est cliquée alors on move le joueur
+    topRows.forEach(row => row.addEventListener('click', () => movePlyerFirstTurn(row.getAttribute('id') - 1)));
+    console.log(tour);
+}
+
 function removeWallTmp(){
 
     var bougerMur = false;
@@ -117,6 +132,11 @@ function handleWall(cellIndex) {
     }
     if ((activePlayer === 'playerA' && nbWallPlayerA === 0) || (activePlayer === 'playerB' && nbWallPlayerB === 0)) {
         alert("Vous n'avez plus de murs !")
+        return;
+    }
+
+    if((tour === 200 && firstTurn) || (tour === 199 && firstTurn)){
+        alert("Vous ne pouvez pas poser de mur au premier tour !");
         return;
     }
 
@@ -501,6 +521,34 @@ function movePlayer(cellIndex) {
 
 }
 
+function movePlyerFirstTurn(cellIndex) {
+    //deplacer le joueur sur la cellule cliqué si elle est sur la ligne du haut et si c'est au tour du joueur A
+    //deplacer le joueur sur la cellule cliqué si elle est sur la ligne du bas et si c'est au tour du joueur B
+    if (activePlayer === 'playerA' && cellIndex >= 0 && cellIndex <= 16) {
+        cells[player1Position].classList.remove('playerA');
+        player1Position = cellIndex;
+        cells[player1Position].classList.add('playerA');
+        const topRows = document.querySelectorAll('.top-row');
+        topRows.forEach(row => row.classList.remove('first-turn'));
+        const message = document.querySelector('.message');
+        message.parentNode.removeChild(message);
+        changeVisibilityPlayer(false, player1Position, "playerA");
+        firstTurn = false;
+
+    } else if (activePlayer === 'playerB' && cellIndex >= 272 && cellIndex <= 288) {
+        cells[player2Position].classList.remove('playerB');
+        player2Position = cellIndex;
+        cells[player2Position].classList.add('playerB');
+        const BottomRows = document.querySelectorAll('.bot-row');
+        BottomRows.forEach(row => row.classList.remove('first-turn'));
+        const message = document.querySelector('.message');
+        message.parentNode.removeChild(message);
+        changeVisibilityPlayer(false, player2Position, "playerB");
+        firstTurn = false;
+
+    }
+}
+
 function checkCrossing(playerAPosition, playerBPosition) {
     var gagneA = false;
     var gagneB = false;
@@ -521,7 +569,7 @@ function checkCrossing(playerAPosition, playerBPosition) {
             gagneB = true;
         }
     }
-    if ((gagneA && gagneB) || tour == 0) {
+    if ((gagneA && gagneB) || tour === 0) {
         alert("match nul !");
         location.reload(true);
     } else if (gagneA) {
@@ -540,6 +588,22 @@ function changeActivePlayer() {
     activateFog();
     checkCrossing(player1Position, player2Position);
     tour--;
+    console.log(tour);
+
+    if(tour === 199){
+        firstTurn = true;
+        const bottomRows = document.querySelectorAll('.bot-row');
+        bottomRows.forEach(row => row.classList.add('first-turn'));
+
+        // Afficher le message pour le premier tour
+        const message = document.createElement('div');
+        message.innerHTML = '1er tour !<br> Placez votre joueur sur une case de la ligne de départ';
+        message.classList.add('message');
+        wrapper.appendChild(message);
+        //si une case de top-row est cliquée alors on move le joueur
+        console.log(tour);
+        bottomRows.forEach(row => row.addEventListener('click', () => movePlyerFirstTurn(row.getAttribute('id') - 1)));
+    }
 }
 
 function hideAntiCheat() {
