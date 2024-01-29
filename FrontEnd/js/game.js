@@ -6,8 +6,7 @@ var nbWallPlayerA = 10;
 var nbWallPlayerB = 10;
 let isClickedCell = false;
 let murAPose = new Array(3);
-hideAntiCheat();
-hideValider();
+
 // Générez les 81 div et ajoutez-les à la div wrapper
 for (var i = 1; i <= 289; i++) {
     var newDiv = document.createElement('div');
@@ -50,11 +49,12 @@ let player2Position = 280;
 cells[player1Position].classList.add('playerA');
 cells[player2Position].classList.add('playerB');
 
-
+hideAntiCheat();
+hideValider();
 var lanePlayerA = document.getElementsByClassName('top-row');
 var lanePlayerB = document.getElementsByClassName('bot-row');
 
-
+dijkstraVisitedNode = [];
 activateFog();
 changeVisibilityPlayer(false, player1Position, "playerA");
 changeVisibilityPlayer(false, player2Position, "playerB");
@@ -157,7 +157,7 @@ function handleWall(cellIndex) {
     }
     //pour placer en verticale
 
-        else if( (clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
+        else if( ((clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) && clickedCell.classList.value.match(/\bwall[AB]\b/) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))// soit cliquer au milieu d'un mur horizontale qui n'a pas de mur vertical
     ||
         (clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col') && (rightCell.classList.value.match(/\bwall[AB]\b/) || leftCell.classList.value.match(/\bwall[AB]\b/)) && !upCell.classList.value.match(/\bwall[AB]\b/) && !downCell.classList.value.match(/\bwall[AB]\b/))){// soit cliquer a cote d'un mur horizontale
 
@@ -174,7 +174,7 @@ function handleWall(cellIndex) {
             poser = true;
         }
 
-        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col')) //la cellule est une ligne
+        else if(clickedCell.classList.contains('odd-row') && !clickedCell.classList.contains('odd-col') && !clickedCell.classList.value.match(/\bwall[AB]\b/)) //la cellule est une ligne
         {
             //horizontale a droite
             if(!cells[cellIndex+2].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+2].classList.contains('odd-row') ){
@@ -194,7 +194,7 @@ function handleWall(cellIndex) {
             }
             //horizontale a gauche
             else if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && cells[cellIndex-2].classList.contains('odd-row')){
-               
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[1] = cellIndex;
                if(!cells[cellIndex- 2].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 2].classList.contains('odd-row') || cells[cellIndex- 2].classList.contains('odd-col')))
@@ -209,10 +209,11 @@ function handleWall(cellIndex) {
 
         }
         }
-        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')) //la cellule est une colonne
+        else if(!clickedCell.classList.contains('odd-row') && clickedCell.classList.contains('odd-col')&& !clickedCell.classList.value.match(/\bwall[AB]\b/)) //la cellule est une colonne
         {
             if(cells[cellIndex-34] != undefined && !cells[cellIndex-34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex-34].classList.contains('odd-col') ){
                 //verticale haut
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[2] = cellIndex;
                 if(!cells[cellIndex- 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex- 34].classList.contains('odd-row') || cells[cellIndex- 34].classList.contains('odd-col')))
@@ -227,6 +228,7 @@ function handleWall(cellIndex) {
             }
             else if( cells[cellIndex+34] != undefined &&!cells[cellIndex+34].classList.value.match(/\bwall[AB]\b/)  && cells[cellIndex+34].classList.contains('odd-col') ){
                 //verticale bas
+
                 clickedCell.classList.add('wallTMP');
                 murAPose[1] = cellIndex;
                 if(!cells[cellIndex+ 34].classList.value.match(/\bwall[AB]\b/) && (cells[cellIndex+ 34].classList.contains('odd-row') || cells[cellIndex+ 34].classList.contains('odd-col')))
@@ -241,7 +243,6 @@ function handleWall(cellIndex) {
             }
         }
         if(poser) {
-            showValider();
             if (activePlayer === 'playerA') {
                 nbWallPlayerA--;
                 document.getElementById('nbWallPlayerA').textContent = `Murs restants : ${nbWallPlayerA}`;
@@ -249,7 +250,14 @@ function handleWall(cellIndex) {
                 nbWallPlayerB--;
                 document.getElementById('nbWallPlayerB').textContent = `Murs restants : ${nbWallPlayerB}`;
             }
+            if(wallPlacable()===0){
+                showValider();
+            }else{
+                alert("Vous ne pouvez pas poser ce mur au risque de bloquer un joueur");
+                annulerWall();
+            }
         }
+
 }
 
 function changeVisibility(rigthCell, leftCell, player, horizontale) {
@@ -392,6 +400,8 @@ function changeVisibilityPlayer(remove,position,player){
 
 function handleCellClick(cellIndex, position) {
     const validMoves = getValidMoves(position);
+
+
     if (isClickedCell) {
         cells.forEach(cell => cell.classList.remove('possible-move'));
         isClickedCell = false;
@@ -540,12 +550,33 @@ function changeActivePlayer() {
     activateFog();
     checkCrossing(player1Position, player2Position);
     tour--;
-}
 
+
+}
+function checkNoMove(){
+
+    if(activePlayer === 'playerA'){
+        const validMoves = getValidMoves(player1Position);
+        if(validMoves.length == 0 && nbWallPlayerA===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+    else if(activePlayer ==='playerB'){
+        const validMoves = getValidMoves(player2Position);
+        if(validMoves.length == 0 && nbWallPlayerB===0){
+            alert("passage de tour");
+            changeActivePlayer();
+        }
+    }
+}
 function hideAntiCheat() {
     document.querySelector('.anti-cheat').style.display = 'none';
     wrapper.style.display = 'grid';
+    setTimeout(checkNoMove,3000);
 }
+
+
 
 function hideValider() {
     document.querySelector('#validerA').style.display = 'none';
@@ -650,5 +681,64 @@ function activateFog() {
                 }
             }
         }
+    }
+}
+
+
+function wallPlacable(){
+    dijkstraVisitedNode = [];
+    var tab ={};
+    for(var i =0;i<cells.length;i=i+2){
+
+        var tmp = [];
+        if(cells[i-1] != undefined && (!cells[i-1].classList.value.match(/\bwall[AB]\b/) && !cells[i-1].classList.contains('wallTMP'))){//il n'y a pas de mur a gauche
+
+            tmp.push((i+1)-2);
+        }
+        if(cells[i+1] != undefined && (!cells[i+1].classList.value.match(/\bwall[AB]\b/) && !cells[i+1].classList.contains('wallTMP'))){//il n'y a pas de mur a droite
+            tmp.push((i+1)+2);
+        }
+        if(cells[i-17] != undefined && (!cells[i-17].classList.value.match(/\bwall[AB]\b/) && !cells[i-17].classList.contains('wallTMP'))){//il n'y a pas de mur au dessus
+            tmp.push((i+1)-34);
+        }
+        if(cells[i+17] != undefined && (!cells[i+17].classList.value.match(/\bwall[AB]\b/)&& !cells[i+17].classList.contains('wallTMP'))){//il n'y a pas de mur en dessous
+            tmp.push(i+1+34);
+        }
+        tab[""+(i+1)]=tmp;
+    }
+   var res1 = dijkstra("playerA",player1Position+1,tab);
+    dijkstraVisitedNode = [];
+    var res2 = dijkstra("playerB",player2Position+1,tab)
+    var res = Math.max(res1, res2);
+    return  res;
+}
+
+function dijkstra(player,cellule,tab) {
+    var lanePlayerAArray = Array.from(lanePlayerA);
+    var lanePlayerBArray = Array.from(lanePlayerB);
+    if (player === 'playerA') {
+
+        if (lanePlayerBArray.includes(document.getElementById('' + cellule))) {
+
+            return 0;
+        }
+    }
+    if (player === 'playerB') {
+
+        if (lanePlayerAArray.includes(document.getElementById('' + cellule))) {
+
+            return 0;
+        }
+    }
+    if (dijkstraVisitedNode.includes(cellule)) {
+
+        return 999;
+    } else {
+        var tmpTab = [];
+        dijkstraVisitedNode.push(cellule);
+        for (var voisin in tab['' + cellule]) {
+            tmpTab.push(dijkstra(player,tab["" + cellule][voisin], tab));
+        }
+        return Math.min.apply(null, tmpTab);
     }
 }
